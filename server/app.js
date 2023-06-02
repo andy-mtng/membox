@@ -3,15 +3,17 @@ require("dotenv").config()
 const express = require("express");
 const mongoose = require("mongoose");
 const memoriesRouter = require("./routes/memoriesRoutes");
+const userRouter = require("./routes/userRoutes");
 
 // Constants
 const port = 5000;
-
 const app = express();
 
 // Middleware
-app.use("/memories", memoriesRouter);
 
+// Routes
+app.use("/memories", memoriesRouter);
+app.use("/user", userRouter);
 app.get("*", (req, res) => {
     res.status(404).json({ message: "Route not found." });
 });
