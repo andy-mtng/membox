@@ -2,6 +2,7 @@
 require("dotenv").config()
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors");
 const memoriesRouter = require("./routes/memoriesRoutes");
 const userRouter = require("./routes/userRoutes");
 
@@ -10,6 +11,8 @@ const port = 5000;
 const app = express();
 
 // Middleware
+app.use(cors());
+app.use(express.json());
 
 // Routes
 app.use("/memories", memoriesRouter);
@@ -19,7 +22,7 @@ app.get("*", (req, res) => {
 });
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI,{ useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(process.env.MONGO_URI,{ useNewUrlParser: true, useUnifiedTopology: true, dbName: "membox-db"})
     .then(() => {
         console.log("Connected to MongoDB.");
     })
