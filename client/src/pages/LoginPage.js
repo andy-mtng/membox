@@ -3,8 +3,8 @@ import { useLogin } from "../hooks/useLogin"
 import { Link } from "react-router-dom";
 
 const LoginPage = () => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState('bob@gmail.com')
+  const [password, setPassword] = useState('Abc123456!')
   const {login, error, isLoading} = useLogin()
 
   const handleSubmit = async (e) => {
