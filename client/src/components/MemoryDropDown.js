@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 
-function MemoryDropDown() {
+function MemoryDropDown({ handleDelete }) {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef(null);
 
@@ -18,12 +18,12 @@ function MemoryDropDown() {
     }, []);
 
     return (
-        <div ref={dropdownRef}>
+        <div ref={dropdownRef} className="ml-auto">
             <button onClick={() => { setIsOpen(!isOpen) }}>...</button>
             {isOpen && (
-                <div>
-                    <h1>Edit</h1>
-                    <h1>Delete</h1>
+                <div className="flex flex-col items-end">
+                    <button>Edit</button>
+                    <button onClick={handleDelete}>Delete</button>
                 </div>
             )}
         </div>

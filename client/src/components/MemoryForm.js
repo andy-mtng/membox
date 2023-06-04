@@ -3,7 +3,7 @@ import { useAuthContext } from "../hooks/useAuthContext";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-function MemoryForm({ displayInformationBox, onMemoryAdded }) {
+function MemoryForm({ displayInformationBox, onMemoryChange }) {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [date, setDate] = useState(new Date());
@@ -15,7 +15,7 @@ function MemoryForm({ displayInformationBox, onMemoryAdded }) {
         e.preventDefault();
         console.log("Title:", title, "Description:", description, "Date", date, "isCoreMemory", isCoreMemory);
         addMemory();
-        onMemoryAdded();
+        onMemoryChange();
     }
 
     const resetFields = () => {

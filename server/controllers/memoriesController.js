@@ -4,7 +4,6 @@ const getMemories = (req, res) => {
     const user = req.user;
     memoryModel.find({ user_id: user._id })
         .then((memoryDocuments) => {
-            console.log("Memories successfully fetched from the DB.");
             res.status(200).json({
                 memories: memoryDocuments,
                 message: "",
@@ -64,10 +63,34 @@ const createMemory = (req, res) => {
 }
 
 // Delete a memory
+const deleteMemory = (req, res) => {
+    console.log('delete hit');
+    const delId = req.query.delId;
+    memoryModel.deleteOne({ _id: delId })
+        .then(() => {
+            console.log("Memory deleted from the DB.");
+            res.status(200).json({
+                message: "Memory successfully deleted.",
+                error: "",
+                validationErrors: "",
+                type: "success"
+            })
+        })
+        .catch(() => {
+            console.log("Error deleting memory from the DB");
+            res.status(500).json({
+                message: "",
+                error: "An error occured deleting the memory.",
+                validationErrors: "",
+                type: "error"
+            });
+        });
+} 
 
 // Edit a memory
 
 module.exports = {
     getMemories: getMemories,
-    createMemory: createMemory
+    createMemory: createMemory,
+    deleteMemory: deleteMemory
 }

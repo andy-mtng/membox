@@ -9,7 +9,7 @@ function MemoriesPage() {
     const [informationMessage, setInformationMessage] = useState('');
     const [informationType, setInformationType] = useState('');
     const [memories, setMemories] = useState([]);
-    // Used to re-render MemoriesPage when new memory is added. Not to keep track of number of memories.
+    // Used to re-render MemoriesPage when a memory is changed. Not to keep track of number of memories.
     const [memoryCount, setMemoryCount] = useState(0);
     const { user } = useAuthContext();
     
@@ -48,7 +48,7 @@ function MemoriesPage() {
         }, 5000);
     }
 
-    const handleMemoryAdded = () => {
+    const handleMemoryChange = () => {
         setMemoryCount((prevCount) => prevCount + 1);
       };
 
@@ -64,14 +64,20 @@ function MemoriesPage() {
                 {memories.map(memory => {
                     return <Memory
                                 key={memory._id}
+                                id={memory._id}
                                 title={memory.title}
                                 description={memory.description}
                                 date={memory.date}
                                 isCoreMemory={memory.isCoreMemory}
+                                displayInformationBox={displayInformationBox}
+                                onMemoryChange={handleMemoryChange}
                             />
                 })}
             </div>
-            <MemoryForm onMemoryAdded={handleMemoryAdded} displayInformationBox={displayInformationBox} />
+            <MemoryForm 
+                onMemoryChange={handleMemoryChange} 
+                displayInformationBox={displayInformationBox} 
+            />
         </div>
     );
 }
