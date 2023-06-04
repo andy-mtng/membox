@@ -57,7 +57,7 @@ function MemoryForm({ displayInformationBox }) {
         })
         .catch((error) => {
             if (error) {
-                displayInformationBox(error, "error");
+                displayInformationBox(error.message, "error");
             }
         });
         resetFields();
