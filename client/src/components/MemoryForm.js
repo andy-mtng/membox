@@ -7,6 +7,7 @@ function MemoryForm({ displayInformationBox }) {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [date, setDate] = useState(new Date());
+    const [isCoreMemory, setIsCoreMemory] = useState(false);
     const [validationErrors, setValidationErrors] = useState([]);
     const { user } = useAuthContext();
 
@@ -20,12 +21,14 @@ function MemoryForm({ displayInformationBox }) {
         setTitle("");
         setDescription("");
         setDate(new Date());
+        setIsCoreMemory(false);
     }
 
     const addMemory = () => {
         const newMemory = {
             title: title,
             description: description,
+            isCoreMemory: isCoreMemory,
             date: date
         }
 
@@ -66,16 +69,18 @@ function MemoryForm({ displayInformationBox }) {
     return (
         <form onSubmit={handleSubmit}>
             <div>
-                <label>Title</label>
+                <label htmlFor="titleInput">Title</label>
                 <input 
+                    id="titleInput"
                     type="text" 
                     value={title} 
                     onChange={(e) => { setTitle(e.target.value) }}
                 />
             </div>
             <div>
-                <label>Description</label>
+                <label htmlFor="descInput">Description</label>
                 <input 
+                    id="descInput"
                     type="text" 
                     value={description} 
                     onChange={(e) => { setDescription(e.target.value) }}
@@ -83,6 +88,13 @@ function MemoryForm({ displayInformationBox }) {
             </div>
             <h1>Date</h1>
             <DatePicker selected={date} onChange={(dateInput) => setDate(dateInput)} />
+            <label htmlFor="coreMemoryInput">Core Memory</label>
+            <input 
+                id="coreMemoryInput" 
+                type="checkbox" 
+                checked={isCoreMemory}
+                onChange={() => setIsCoreMemory(!isCoreMemory)}
+            />
             <button type="submit">Submit</button>
         </form>
     )

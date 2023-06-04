@@ -14,6 +14,10 @@ const memorySchema = new Schema({
         type: Date,
         required: true
     },
+    isCoreMemory: {
+        type: Boolean,
+        required: true
+    },
     user_id: {
         type: String,
         required: true

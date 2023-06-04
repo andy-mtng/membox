@@ -20,6 +20,7 @@ function MemoriesPage() {
         })
         .then((response) => response.json())
         .then((data) => {
+            console.log(data.memories);
             if (data.type === "error") {
                 throw new Error(data.error);
             }
