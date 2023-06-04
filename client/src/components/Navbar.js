@@ -19,7 +19,7 @@ function Navbar() {
                 </svg>
                 <h1 className="font-semibold text-2xl relative bottom-0.5">Membox</h1>
             </Link>
-            { !user ? <Link to="/login">Login</Link> : <button onClick={handleClick}>Logout</button> }
+            { !user ? <Link to="/login" className="font-medium">Login</Link> : <button className="font-medium" onClick={handleClick}>Logout</button> }
         </nav>
     )
 }

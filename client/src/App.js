@@ -13,7 +13,7 @@ function App() {
   const { user } = useAuthContext();
 
   return (
-    <div>
+    <div className="font-inter">
       <BrowserRouter>
           <Navbar/>
           <Routes>
