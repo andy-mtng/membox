@@ -68,7 +68,7 @@ function MemoryForm({ displayInformationBox, onMemoryAdded }) {
     }
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="bg-blue-200 w-96">
             <div>
                 <label htmlFor="titleInput">Title</label>
                 <input 
