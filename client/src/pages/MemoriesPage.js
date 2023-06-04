@@ -9,9 +9,11 @@ function MemoriesPage() {
     const [informationMessage, setInformationMessage] = useState('');
     const [informationType, setInformationType] = useState('');
     const [memories, setMemories] = useState([]);
+    // Used to re-render MemoriesPage when new memory is added. Not to keep track of number of memories.
+    const [memoryCount, setMemoryCount] = useState(0);
     const { user } = useAuthContext();
     
-    const getMemories = () => {
+    const getMemories = async () => {
         fetch("http://localhost:5000/memories", {
             method: "GET",
             headers: {
@@ -46,25 +48,30 @@ function MemoriesPage() {
         }, 5000);
     }
 
+    const handleMemoryAdded = () => {
+        setMemoryCount((prevCount) => prevCount + 1);
+      };
+
     useEffect(() => {
         getMemories();
-    }, []);
+    }, [memoryCount]);
 
     return (
         <div>
             {showInformationBox && <InformationBox message={informationMessage} type={informationType}/>}
             <h1 className="text-center mt-8 text-4xl font-bold">Memories</h1>
-            {memories.map(memory => {
-                return <Memory 
-                            key={memory._id} 
-                            title={memory.title} 
-                            description={memory.description} 
-                            date={memory.date}
-                        />
-            })}
-            <MemoryForm 
-                displayInformationBox={displayInformationBox}
-            />
+            <div className="grid grid-cols-3 gap-4">
+                {memories.map(memory => {
+                    return <Memory
+                                key={memory._id}
+                                title={memory.title}
+                                description={memory.description}
+                                date={memory.date}
+                                isCoreMemory={memory.isCoreMemory}
+                            />
+                })}
+            </div>
+            <MemoryForm onMemoryAdded={handleMemoryAdded} displayInformationBox={displayInformationBox} />
         </div>
     );
 }

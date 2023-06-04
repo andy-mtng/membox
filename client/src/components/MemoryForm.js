@@ -3,7 +3,7 @@ import { useAuthContext } from "../hooks/useAuthContext";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-function MemoryForm({ displayInformationBox }) {
+function MemoryForm({ displayInformationBox, onMemoryAdded }) {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [date, setDate] = useState(new Date());
@@ -13,8 +13,9 @@ function MemoryForm({ displayInformationBox }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("Title:", title, "Description:", description, "Date", date);
+        console.log("Title:", title, "Description:", description, "Date", date, "isCoreMemory", isCoreMemory);
         addMemory();
+        onMemoryAdded();
     }
 
     const resetFields = () => {
@@ -86,15 +87,19 @@ function MemoryForm({ displayInformationBox }) {
                     onChange={(e) => { setDescription(e.target.value) }}
                 />
             </div>
-            <h1>Date</h1>
-            <DatePicker selected={date} onChange={(dateInput) => setDate(dateInput)} />
-            <label htmlFor="coreMemoryInput">Core Memory</label>
-            <input 
-                id="coreMemoryInput" 
-                type="checkbox" 
-                checked={isCoreMemory}
-                onChange={() => setIsCoreMemory(!isCoreMemory)}
-            />
+            <div>
+                <h1>Date</h1>
+                <DatePicker selected={date} onChange={(dateInput) => setDate(dateInput)} />
+            </div>
+            <div>
+                <label htmlFor="coreMemoryInput">Core Memory</label>
+                <input
+                    id="coreMemoryInput"
+                    type="checkbox"
+                    checked={isCoreMemory}
+                    onChange={() => setIsCoreMemory(!isCoreMemory)}
+                />
+            </div>
             <button type="submit">Submit</button>
         </form>
     )
