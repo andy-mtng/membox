@@ -11,4 +11,6 @@ router.post("/", memoriesController.createMemory);
 
 router.delete("/", memoriesController.deleteMemory);
 
+router.put("/", memoriesController.editMemory);
+
 module.exports = router;

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 
-function MemoryDropDown({ handleDelete }) {
+function MemoryDropDown({ handleDelete, setIsEditing }) {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef(null);
 
@@ -11,9 +11,9 @@ function MemoryDropDown({ handleDelete }) {
     };
 
     useEffect(() => {
-        document.addEventListener('mousedown', handleClickOutside);
+        document.addEventListener("mousedown", handleClickOutside);
         return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
+            document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
 
@@ -22,7 +22,7 @@ function MemoryDropDown({ handleDelete }) {
             <button onClick={() => { setIsOpen(!isOpen) }}>...</button>
             {isOpen && (
                 <div className="flex flex-col items-end">
-                    <button>Edit</button>
+                    <button onClick={() => { setIsEditing(true) }}>Edit</button>
                     <button onClick={handleDelete}>Delete</button>
                 </div>
             )}

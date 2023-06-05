@@ -3,7 +3,7 @@ import { useAuthContext } from "../hooks/useAuthContext";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-function MemoryForm({ displayInformationBox, onMemoryChange }) {
+function AddMemoryForm({ displayInformationBox, onMemoryChange }) {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [date, setDate] = useState(new Date());
@@ -68,7 +68,7 @@ function MemoryForm({ displayInformationBox, onMemoryChange }) {
     }
 
     return (
-        <form onSubmit={handleSubmit} className="bg-blue-200 w-96">
+        <form onSubmit={handleSubmit} className="bg-orange-200 w-96">
             <div>
                 <label htmlFor="titleInput">Title</label>
                 <input 
@@ -105,4 +105,4 @@ function MemoryForm({ displayInformationBox, onMemoryChange }) {
     )
 }
 
-export default MemoryForm;
+export default AddMemoryForm;

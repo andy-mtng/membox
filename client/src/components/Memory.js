@@ -1,9 +1,12 @@
 import { format } from "date-fns";
 import moment from 'moment';
 import MemoryDropDown from "./MemoryDropDown";
+import EditMemoryForm from "./EditMemoryForm";
 import { useAuthContext } from "../hooks/useAuthContext";
+import { useState } from "react";
 
 function Memory({ onMemoryChange, id, title, description, date, isCoreMemory, displayInformationBox }) {
+    const [isEditing, setIsEditing] = useState(false);
     const momentDate = moment(date);
     const formattedDate = momentDate.format('MMMM DD, YYYY');
     const { user } = useAuthContext();
@@ -36,16 +39,22 @@ function Memory({ onMemoryChange, id, title, description, date, isCoreMemory, di
         });
         onMemoryChange();
     }
-
+ 
     return (
         <div className="flex flex-col border border-black w-96">
-            <MemoryDropDown handleDelete={handleDelete}/>
+            <MemoryDropDown handleDelete={handleDelete} setIsEditing={setIsEditing}/>
             <div>
                 <h1>Title: {title}</h1>
                 <p>Description: {description}</p>
                 <p>isCoreMemory: {isCoreMemory ? "true" : "false"}</p>
                 <h2>Date: {formattedDate}</h2>
             </div>
+            {isEditing && <EditMemoryForm 
+                                memory={{ title: title, description: description, isCoreMemory: isCoreMemory, date: date, id: id }}
+                                onMemoryChange={onMemoryChange} 
+                                displayInformationBox={displayInformationBox} 
+                                setIsEditing={setIsEditing}
+                            />}
         </div>
     )
 }

@@ -64,7 +64,6 @@ const createMemory = (req, res) => {
 
 // Delete a memory
 const deleteMemory = (req, res) => {
-    console.log('delete hit');
     const delId = req.query.delId;
     memoryModel.deleteOne({ _id: delId })
         .then(() => {
@@ -88,9 +87,33 @@ const deleteMemory = (req, res) => {
 } 
 
 // Edit a memory
+const editMemory = (req, res) => {
+    const editId = req.query.editId;
+    const editedMemory = req.body;
+    memoryModel.updateOne({ _id: editId }, editedMemory)
+        .then(() => {
+            console.log("Memory edited in the DB.");
+            res.status(200).json({
+                message: "Memory successfully edited.",
+                error: "",
+                validationErrors: "",
+                type: "success"
+            })
+        })
+        .catch(() => {
+            console.log("Error editing memory from the DB");
+            res.status(500).json({
+                message: "",
+                error: "An error occured editing the memory.",
+                validationErrors: "",
+                type: "error"
+            });
+        });
+}
 
 module.exports = {
     getMemories: getMemories,
     createMemory: createMemory,
-    deleteMemory: deleteMemory
+    deleteMemory: deleteMemory,
+    editMemory: editMemory
 }

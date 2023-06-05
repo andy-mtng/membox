@@ -1,4 +1,4 @@
-import MemoryForm from "../components/MemoryForm";
+import AddMemoryForm from "../components/AddMemoryForm";
 import Memory from "../components/Memory";
 import InformationBox from "../components/InformationBox";
 import { useState, useEffect } from "react";
@@ -13,7 +13,7 @@ function MemoriesPage() {
     const [memoryCount, setMemoryCount] = useState(0);
     const { user } = useAuthContext();
     
-    const getMemories = async () => {
+    const getMemories = () => {
         fetch("http://localhost:5000/memories", {
             method: "GET",
             headers: {
@@ -54,6 +54,7 @@ function MemoriesPage() {
 
     useEffect(() => {
         getMemories();
+        console.log("memoryCount", memoryCount);
     }, [memoryCount]);
 
     return (
@@ -74,7 +75,7 @@ function MemoriesPage() {
                             />
                 })}
             </div>
-            <MemoryForm 
+            <AddMemoryForm 
                 onMemoryChange={handleMemoryChange} 
                 displayInformationBox={displayInformationBox} 
             />
