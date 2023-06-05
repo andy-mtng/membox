@@ -9,6 +9,7 @@ function MemoriesPage() {
     const [informationMessage, setInformationMessage] = useState('');
     const [informationType, setInformationType] = useState('');
     const [memories, setMemories] = useState([]);
+    const [isAdding, setIsAdding] = useState(false);
     // Used to re-render MemoriesPage when a memory is changed. Not to keep track of number of memories.
     const [memoryCount, setMemoryCount] = useState(0);
     const { user } = useAuthContext();
@@ -60,7 +61,6 @@ function MemoriesPage() {
     return (
         <div>
             {showInformationBox && <InformationBox message={informationMessage} type={informationType}/>}
-            <h1 className="text-center mt-8 text-4xl font-bold">Memories</h1>
             <div className="grid grid-cols-3 gap-4">
                 {memories.map(memory => {
                     return <Memory
@@ -75,10 +75,13 @@ function MemoriesPage() {
                             />
                 })}
             </div>
+            <button onClick={() => { setIsAdding(true) }}>+</button>
+            {isAdding &&
             <AddMemoryForm 
+                setIsAdding={setIsAdding}
                 onMemoryChange={handleMemoryChange} 
                 displayInformationBox={displayInformationBox} 
-            />
+            />}
         </div>
     );
 }

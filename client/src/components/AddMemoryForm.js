@@ -1,15 +1,16 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useAuthContext } from "../hooks/useAuthContext";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-function AddMemoryForm({ displayInformationBox, onMemoryChange }) {
+function AddMemoryForm({ displayInformationBox, onMemoryChange, setIsAdding }) {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [date, setDate] = useState(new Date());
     const [isCoreMemory, setIsCoreMemory] = useState(false);
     const [validationErrors, setValidationErrors] = useState([]);
     const { user } = useAuthContext();
+    const addFormRef = useRef(null);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -67,8 +68,21 @@ function AddMemoryForm({ displayInformationBox, onMemoryChange }) {
         resetFields();
     }
 
+    const handleClickOutside = (event) => {
+        if (addFormRef.current && !addFormRef.current.contains(event.target)) {
+            setIsAdding(false);
+        }
+    }
+    
+    useEffect(() => {
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        }
+    }, []);
+
     return (
-        <form onSubmit={handleSubmit} className="bg-orange-200 w-96">
+        <form onSubmit={handleSubmit} className="bg-orange-200 w-96" ref={addFormRef}>
             <div>
                 <label htmlFor="titleInput">Title</label>
                 <input 
