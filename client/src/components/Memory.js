@@ -41,23 +41,14 @@ function Memory({ onMemoryChange, id, title, description, date, isCoreMemory, di
     }
  
     return (
-        <div className="">
-            <div className="flex flex-col border border-gray-300 p-4 shadow-sm rounded-lg w-96 h-auto">
-                <MemoryDropDown handleDelete={handleDelete} setIsEditing={setIsEditing}/>
+        <div className="relative border border-gray-200 shadow-sm rounded-md w-80 h-32 p-3">
+            <MemoryDropDown handleDelete={handleDelete} setIsEditing={setIsEditing}/>
+            <div className="flex flex-col h-full justify-center">
                 <div>
-                    <h1>{title}</h1>
-                    <p>{description}</p>
-                    <p>{isCoreMemory ? "true" : "false"}</p>
-                    <h2>{formattedDate}</h2>
+                    <h1 className="font-bold text-xl">{title}</h1>
+                    <p className="font-normal text-sm text-gray-600">{description}</p>
                 </div>
-            </div>
-            <div className="">
-                {isEditing && <EditMemoryForm
-                                    memory={{ title: title, description: description, isCoreMemory: isCoreMemory, date: date, id: id }}
-                                    onMemoryChange={onMemoryChange}
-                                    displayInformationBox={displayInformationBox}
-                                    setIsEditing={setIsEditing}
-                                />}
+                <h2 className="font-normal text-sm text-gray-600">{formattedDate}</h2>
             </div>
         </div>
     )

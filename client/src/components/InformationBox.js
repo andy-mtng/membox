@@ -17,7 +17,7 @@ function InformationBox({ message, type }) {
     const boxClassName = getClassName();
 
     return (
-        <div>
+        <div className="absolute right-4 top-4 bg-gray-300">
             <h2>{boxClassName}</h2>
             <h1>{message}</h1>
         </div>

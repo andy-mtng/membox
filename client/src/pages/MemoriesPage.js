@@ -63,12 +63,13 @@ function MemoriesPage() {
         <div className="flex h-screen">
             <Sidebar />
             {showInformationBox && <InformationBox message={informationMessage} type={informationType}/>}
+            {/* <h1 className="font-bold text-2xl">Welcome back, Bob!</h1> */}
             <button className="fixed bottom-6 right-6 rounded-full px-4 py-4 bg-green-800" onClick={() => { setIsAdding(true) }}>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="text-green-300 w-4 h-4">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-            </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-6 h-6 font-bold text-green-300">
+                    <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+                </svg>
             </button>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-3 flex-none">
                 {memories.map(memory => {
                     return <Memory
                                 key={memory._id}
@@ -88,6 +89,14 @@ function MemoriesPage() {
                 onMemoryChange={handleMemoryChange} 
                 displayInformationBox={displayInformationBox} 
             />}
+            {/* <div className="">
+                {isEditing && <EditMemoryForm
+                                    memory={{ title: title, description: description, isCoreMemory: isCoreMemory, date: date, id: id }}
+                                    onMemoryChange={onMemoryChange}
+                                    displayInformationBox={displayInformationBox}
+                                    setIsEditing={setIsEditing}
+                                />}
+            </div> */}
         </div>
     );
 }

@@ -82,40 +82,51 @@ function AddMemoryForm({ displayInformationBox, onMemoryChange, setIsAdding }) {
     }, []);
 
     return (
-        <form onSubmit={handleSubmit} className="bg-orange-200 w-96" ref={addFormRef}>
-            <div>
-                <label htmlFor="titleInput">Title</label>
-                <input 
-                    id="titleInput"
-                    type="text" 
-                    value={title} 
-                    onChange={(e) => { setTitle(e.target.value) }}
-                />
-            </div>
-            <div>
-                <label htmlFor="descInput">Description</label>
-                <input 
-                    id="descInput"
-                    type="text" 
-                    value={description} 
-                    onChange={(e) => { setDescription(e.target.value) }}
-                />
-            </div>
-            <div>
-                <h1>Date</h1>
-                <DatePicker selected={date} onChange={(dateInput) => setDate(dateInput)} />
-            </div>
-            <div>
-                <label htmlFor="coreMemoryInput">Core Memory</label>
-                <input
-                    id="coreMemoryInput"
-                    type="checkbox"
-                    checked={isCoreMemory}
-                    onChange={() => setIsCoreMemory(!isCoreMemory)}
-                />
-            </div>
-            <button type="submit">Submit</button>
-        </form>
+        <div ref={addFormRef} className="h-auto w-96 border-2 shadow-lg border-gray-100 bg-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-8">
+            <h1 className="font-xl font-bold mb-3">Add a New Memory</h1>
+            <form
+                onSubmit={handleSubmit}
+                className="flex flex-col gap-4"
+                >
+                <div className="flex flex-col gap-1">
+                    <label className="text-sm" htmlFor="titleInput">Title</label>
+                    <input
+                        className="bg-gray-50 rounded-sm border border-gray-300 p-1"
+                        id="titleInput"
+                        type="text"
+                        value={title}
+                        onChange={(e) => { setTitle(e.target.value) }}
+                    />
+                </div>
+                <div className="flex flex-col gap-1">
+                    <label className="text-sm" htmlFor="descInput">Description</label>
+                    <textarea
+                    className="bg-gray-50 rounded-sm border border-gray-300"
+                        id="descInput"
+                        type="text"
+                        rows={6}
+                        value={description}
+                        style={{ resize: 'none' }} // Set the resize property to none
+                        onChange={(e) => { setDescription(e.target.value) }}
+                    />
+                </div>
+                <div className="flex flex-col gap-1">
+                    <h1 className="text-sm">Date</h1>
+                    <DatePicker className="rounded-sm text-sm bg-gray-50 w-full border border-gray-300 p-1" selected={date} onChange={(dateInput) => setDate(dateInput)} />
+                </div>
+                <div className="flex gap-2 items-center">
+                    <label className="text-sm" htmlFor="coreMemoryInput">Core Memory</label>
+                    <input
+                        id="coreMemoryInput"
+                        type="checkbox"
+                        className="w-5 h-5"
+                        checked={isCoreMemory}
+                        onChange={() => setIsCoreMemory(!isCoreMemory)}
+                    />
+                </div>
+                <button className="bg-blue-600 py-2 rounded-sm text-white text-sm" type="submit">Submit</button>
+            </form>
+        </div>
     )
 }
 
