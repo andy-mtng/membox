@@ -57,7 +57,7 @@ function EditMemoryForm({ onMemoryChange, memory, displayInformationBox, setIsEd
     }
 
     return (
-        <form onSubmit={handleSubmit} className="bg-orange-200 w-96">
+        <form onSubmit={handleSubmit} className="bg-orange-200 w-96 absolute top-0 left-0">
         <div>
             <label htmlFor="titleInput">Title</label>
             <input 

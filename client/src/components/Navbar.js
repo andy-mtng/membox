@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { ReactComponent as Logo } from '../assets/membox-logo2.svg';
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useLogout } from "../hooks/useLogout";
 

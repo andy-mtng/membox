@@ -15,7 +15,6 @@ function App() {
   return (
     <div className="font-inter">
       <BrowserRouter>
-          <Navbar/>
           <Routes>
               <Route path="/" element={user ? <Navigate to="/memories"/> : <LandingPage/>}/>
               <Route path="/login" element={user ? <Navigate to="/memories"/> : <LoginPage/>}/>

@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useLogin } from "../hooks/useLogin"
 import { Link } from "react-router-dom";
+import Navbar from "../components/Navbar";
 
 const LoginPage = () => {
   const [email, setEmail] = useState('bob@gmail.com')
@@ -15,6 +16,7 @@ const LoginPage = () => {
 
   return (
     <div>
+      <Navbar />
       <form className="login" onSubmit={handleSubmit}>
         <h3>Log In</h3>
       

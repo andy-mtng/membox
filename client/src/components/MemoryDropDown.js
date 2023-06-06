@@ -18,7 +18,7 @@ function MemoryDropDown({ handleDelete, setIsEditing }) {
     }, []);
 
     return (
-        <div ref={dropdownRef} className="ml-auto">
+        <div ref={dropdownRef} className="ml-auto fixed r-2 top-2">
             <button onClick={() => { setIsOpen(!isOpen) }}>...</button>
             {isOpen && (
                 <div className="flex flex-col items-end">

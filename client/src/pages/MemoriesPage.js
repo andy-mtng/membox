@@ -1,6 +1,7 @@
 import AddMemoryForm from "../components/AddMemoryForm";
 import Memory from "../components/Memory";
 import InformationBox from "../components/InformationBox";
+import Sidebar from "../components/Sidebar";
 import { useState, useEffect } from "react";
 import { useAuthContext } from "../hooks/useAuthContext";
 
@@ -59,9 +60,15 @@ function MemoriesPage() {
     }, [memoryCount]);
 
     return (
-        <div>
+        <div className="flex h-screen">
+            <Sidebar />
             {showInformationBox && <InformationBox message={informationMessage} type={informationType}/>}
-            <div className="grid grid-cols-3 gap-4">
+            <button className="fixed bottom-6 right-6 rounded-full px-4 py-4 bg-green-800" onClick={() => { setIsAdding(true) }}>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="text-green-300 w-4 h-4">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            </button>
+            <div className="grid grid-cols-2 gap-4">
                 {memories.map(memory => {
                     return <Memory
                                 key={memory._id}
@@ -75,7 +82,6 @@ function MemoriesPage() {
                             />
                 })}
             </div>
-            <button onClick={() => { setIsAdding(true) }}>+</button>
             {isAdding &&
             <AddMemoryForm 
                 setIsAdding={setIsAdding}
