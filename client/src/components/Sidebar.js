@@ -12,7 +12,7 @@ function Sidebar() {
     }
 
     return (
-        <div className="h-full border-r border-gray-300 px-6 flex flex-col justify-between">
+        <div className="fixed h-full border-r border-gray-300 px-6 flex flex-col justify-between ml-auto">
             <div className="flex flex-col gap-5">
                 <Link to="/memories" className="flex gap-2 items-center relative mt-8 text-base">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-7 h-7">

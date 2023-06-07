@@ -41,9 +41,9 @@ function Memory({ onMemoryChange, id, title, description, date, isCoreMemory, di
     }
  
     return (
-        <div className="relative border border-gray-200 shadow-sm rounded-md w-80 h-32 p-3">
+        <div className="relative border border-gray-200 shadow-sm rounded-md w-80 p-3">
             <MemoryDropDown handleDelete={handleDelete} setIsEditing={setIsEditing}/>
-            <div className="flex flex-col h-full justify-center">
+            <div className="flex h-40 flex-col justify-between">
                 <div>
                     <h1 className="font-bold text-xl">{title}</h1>
                     <p className="font-normal text-sm text-gray-600">{description}</p>
