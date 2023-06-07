@@ -3,19 +3,19 @@ import { useAuthContext } from "../hooks/useAuthContext";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-function AddMemoryForm({ displayInformationBox, onMemoryChange, setIsAdding }) {
-    const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("");
-    const [date, setDate] = useState(new Date());
-    const [isCoreMemory, setIsCoreMemory] = useState(false);
+function MemoryForm({ memoryToEdit, isEditing, displayInformationBox, onMemoryChange, setIsEditing, setIsAdding }) {
+    const [title, setTitle] = useState(isEditing ? memoryToEdit.title : "");
+    const [description, setDescription] = useState(isEditing ? memoryToEdit.description : "");
+    const [date, setDate] = useState(isEditing ? new Date(memoryToEdit.date) : new Date());
+    const [isCoreMemory, setIsCoreMemory] = useState(isEditing ? memoryToEdit.isCoreMemory : false);
     const [validationErrors, setValidationErrors] = useState([]);
     const { user } = useAuthContext();
-    const addFormRef = useRef(null);
+    const formRef = useRef(null);
 
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log("Title:", title, "Description:", description, "Date", date, "isCoreMemory", isCoreMemory);
-        addMemory();
+        apiCall();
         onMemoryChange();
     }
 
@@ -26,7 +26,7 @@ function AddMemoryForm({ displayInformationBox, onMemoryChange, setIsAdding }) {
         setIsCoreMemory(false);
     }
 
-    const addMemory = () => {
+    const apiCall = () => {
         const newMemory = {
             title: title,
             description: description,
@@ -34,8 +34,8 @@ function AddMemoryForm({ displayInformationBox, onMemoryChange, setIsAdding }) {
             date: date
         }
 
-        fetch("http://localhost:5000/memories", {
-            method: "POST",
+        fetch(isEditing ? `http://localhost:5000/memories?editId=${memoryToEdit.id}` : "http://localhost:5000/memories", {
+            method: isEditing ? "PUT" : "POST",
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${user.token}`
@@ -65,12 +65,19 @@ function AddMemoryForm({ displayInformationBox, onMemoryChange, setIsAdding }) {
                 displayInformationBox(error.message, "error");
             }
         });
-        resetFields();
+        if (isEditing) {
+            // Close the form when the user finishes editing
+            setIsEditing(false);
+        } else {
+            // Reset the fields of the form for the user to continue adding new memories
+            resetFields();
+        }
     }
 
     const handleClickOutside = (event) => {
-        if (addFormRef.current && !addFormRef.current.contains(event.target)) {
+        if (formRef.current && !formRef.current.contains(event.target)) {
             setIsAdding(false);
+            setIsEditing(false);
         }
     }
     
@@ -82,8 +89,8 @@ function AddMemoryForm({ displayInformationBox, onMemoryChange, setIsAdding }) {
     }, []);
 
     return (
-        <div ref={addFormRef} className="h-auto w-96 border-2 shadow-lg border-gray-100 bg-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-8">
-            <h1 className="font-xl font-bold mb-3">Add a New Memory</h1>
+        <div ref={formRef} className="h-auto w-96 border-2 shadow-lg border-gray-100 bg-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-8">
+            <h1 className="font-xl font-bold mb-3">{isEditing ? "Edit Memory" : "Add a New Memory"}</h1>
             <form
                 onSubmit={handleSubmit}
                 className="flex flex-col gap-4"
@@ -124,10 +131,10 @@ function AddMemoryForm({ displayInformationBox, onMemoryChange, setIsAdding }) {
                         onChange={() => setIsCoreMemory(!isCoreMemory)}
                     />
                 </div>
-                <button className="bg-blue-600 py-2 rounded-sm text-white text-sm" type="submit">Submit</button>
+                <button className="bg-blue-600 py-2 rounded-sm text-white text-sm" type="submit">{isEditing ? "Save" : "Submit"}</button>
             </form>
         </div>
     )
 }
 
-export default AddMemoryForm;
+export default MemoryForm;

@@ -1,4 +1,4 @@
-import AddMemoryForm from "../components/AddMemoryForm";
+import MemoryForm from "../components/MemoryForm";
 import Memory from "../components/Memory";
 import InformationBox from "../components/InformationBox";
 import Sidebar from "../components/Sidebar";
@@ -11,6 +11,8 @@ function MemoriesPage() {
     const [informationType, setInformationType] = useState('');
     const [memories, setMemories] = useState([]);
     const [isAdding, setIsAdding] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+    const [memoryToEdit, setMemoryToEdit] = useState({});
     // Used to re-render MemoriesPage when a memory is changed. Not to keep track of number of memories.
     const [memoryCount, setMemoryCount] = useState(0);
     const { user } = useAuthContext();
@@ -78,25 +80,23 @@ function MemoriesPage() {
                                 description={memory.description}
                                 date={memory.date}
                                 isCoreMemory={memory.isCoreMemory}
+                                setIsEditing={setIsEditing}
                                 displayInformationBox={displayInformationBox}
                                 onMemoryChange={handleMemoryChange}
+                                memoryToEdit={memoryToEdit}
+                                setMemoryToEdit={setMemoryToEdit}
                             />
                 })}
             </div>
-            {isAdding &&
-            <AddMemoryForm 
+            {(isAdding || isEditing) &&
+            <MemoryForm
+                isEditing={isEditing}
+                setIsEditing={setIsEditing}
                 setIsAdding={setIsAdding}
                 onMemoryChange={handleMemoryChange} 
                 displayInformationBox={displayInformationBox} 
+                memoryToEdit={memoryToEdit}
             />}
-            {/* <div className="">
-                {isEditing && <EditMemoryForm
-                                    memory={{ title: title, description: description, isCoreMemory: isCoreMemory, date: date, id: id }}
-                                    onMemoryChange={onMemoryChange}
-                                    displayInformationBox={displayInformationBox}
-                                    setIsEditing={setIsEditing}
-                                />}
-            </div> */}
         </div>
     );
 }

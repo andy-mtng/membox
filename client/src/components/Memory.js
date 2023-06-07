@@ -1,12 +1,19 @@
-import { format } from "date-fns";
 import moment from 'moment';
 import MemoryDropDown from "./MemoryDropDown";
-import EditMemoryForm from "./EditMemoryForm";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useState } from "react";
 
-function Memory({ onMemoryChange, id, title, description, date, isCoreMemory, displayInformationBox }) {
-    const [isEditing, setIsEditing] = useState(false);
+function Memory({ 
+            setIsEditing, 
+            onMemoryChange, 
+            id, 
+            title, 
+            description, 
+            date, 
+            isCoreMemory, 
+            memoryToEdit,
+            setMemoryToEdit,
+            displayInformationBox }) {
     const momentDate = moment(date);
     const formattedDate = momentDate.format('MMMM DD, YYYY');
     const { user } = useAuthContext();
@@ -39,10 +46,23 @@ function Memory({ onMemoryChange, id, title, description, date, isCoreMemory, di
         });
         onMemoryChange();
     }
+
+    const handleEdit = (e) => {
+        e.preventDefault();
+        setIsEditing(true);
+        // Used to pre-populate the memory form for edits (raises the state to the parent)
+        setMemoryToEdit({
+            title: title,
+            description: description,
+            id: id,
+            date: date,
+            isCoreMemory: isCoreMemory,
+        });
+    }
  
     return (
         <div className="relative border border-gray-200 shadow-sm rounded-md w-80 p-3">
-            <MemoryDropDown handleDelete={handleDelete} setIsEditing={setIsEditing}/>
+            <MemoryDropDown handleDelete={handleDelete} handleEdit={handleEdit} setIsEditing={setIsEditing}/>
             <div className="flex h-40 flex-col justify-between">
                 <div>
                     <h1 className="font-bold text-xl">{title}</h1>
