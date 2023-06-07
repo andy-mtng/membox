@@ -4,6 +4,8 @@ import InformationBox from "../components/InformationBox";
 import Sidebar from "../components/Sidebar";
 import { useState, useEffect } from "react";
 import { useAuthContext } from "../hooks/useAuthContext";
+import React from 'react';
+import MemoryChangeContext from "../context/MemoryChangeContext";
 
 function MemoriesPage() {
     const [showInformationBox, setShowInformationBox] = useState(false);
@@ -16,6 +18,8 @@ function MemoriesPage() {
     // Used to re-render MemoriesPage when a memory is changed. Not to keep track of number of memories.
     const [memoryCount, setMemoryCount] = useState(0);
     const { user } = useAuthContext();
+
+
     
     const getMemories = () => {
         fetch("http://localhost:5000/memories", {
@@ -71,32 +75,33 @@ function MemoriesPage() {
                     <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
                 </svg>
             </button>
-            <div className="grid grid-cols-3 ml-52 p-5 gap-8">
-                {memories.map(memory => {
-                    return <Memory
-                                key={memory._id}
-                                id={memory._id}
-                                title={memory.title}
-                                description={memory.description}
-                                date={memory.date}
-                                isCoreMemory={memory.isCoreMemory}
-                                setIsEditing={setIsEditing}
-                                displayInformationBox={displayInformationBox}
-                                onMemoryChange={handleMemoryChange}
-                                memoryToEdit={memoryToEdit}
-                                setMemoryToEdit={setMemoryToEdit}
-                            />
-                })}
-            </div>
-            {(isAdding || isEditing) &&
-            <MemoryForm
-                isEditing={isEditing}
-                setIsEditing={setIsEditing}
-                setIsAdding={setIsAdding}
-                onMemoryChange={handleMemoryChange} 
-                displayInformationBox={displayInformationBox} 
-                memoryToEdit={memoryToEdit}
-            />}
+
+            <MemoryChangeContext.Provider value={handleMemoryChange}>
+                <div className="grid grid-cols-3 ml-52 p-5 gap-8">
+                    {memories.map(memory => {
+                        return <Memory
+                                    key={memory._id}
+                                    id={memory._id}
+                                    title={memory.title}
+                                    description={memory.description}
+                                    date={memory.date}
+                                    isCoreMemory={memory.isCoreMemory}
+                                    setIsEditing={setIsEditing}
+                                    displayInformationBox={displayInformationBox}
+                                    memoryToEdit={memoryToEdit}
+                                    setMemoryToEdit={setMemoryToEdit}
+                                />
+                    })}
+                </div>
+                {(isAdding || isEditing) &&
+                <MemoryForm
+                    isEditing={isEditing}
+                    setIsEditing={setIsEditing}
+                    setIsAdding={setIsAdding}
+                    displayInformationBox={displayInformationBox} 
+                    memoryToEdit={memoryToEdit}
+                />} 
+            </MemoryChangeContext.Provider>
         </div>
     );
 }

@@ -1,9 +1,10 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import { useAuthContext } from "../hooks/useAuthContext";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import MemoryChangeContext from "../context/MemoryChangeContext";
 
-function MemoryForm({ memoryToEdit, isEditing, displayInformationBox, onMemoryChange, setIsEditing, setIsAdding }) {
+function MemoryForm({ memoryToEdit, isEditing, displayInformationBox, setIsEditing, setIsAdding }) {
     const [title, setTitle] = useState(isEditing ? memoryToEdit.title : "");
     const [description, setDescription] = useState(isEditing ? memoryToEdit.description : "");
     const [date, setDate] = useState(isEditing ? new Date(memoryToEdit.date) : new Date());
@@ -11,6 +12,7 @@ function MemoryForm({ memoryToEdit, isEditing, displayInformationBox, onMemoryCh
     const [validationErrors, setValidationErrors] = useState([]);
     const { user } = useAuthContext();
     const formRef = useRef(null);
+    const handleMemoryChange = useContext(MemoryChangeContext);
 
     const handleSubmit =  (e) => {
         e.preventDefault();
@@ -58,7 +60,7 @@ function MemoryForm({ memoryToEdit, isEditing, displayInformationBox, onMemoryCh
             }
 
             console.log(data);
-            onMemoryChange();
+            handleMemoryChange();
         })
         .catch((error) => {
             if (error) {

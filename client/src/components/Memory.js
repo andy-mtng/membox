@@ -1,11 +1,11 @@
 import moment from 'moment';
 import MemoryDropDown from "./MemoryDropDown";
 import { useAuthContext } from "../hooks/useAuthContext";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import MemoryChangeContext from '../context/MemoryChangeContext';
 
 function Memory({ 
             setIsEditing, 
-            onMemoryChange, 
             id, 
             title, 
             description, 
@@ -17,6 +17,7 @@ function Memory({
     const momentDate = moment(date);
     const formattedDate = momentDate.format('MMMM DD, YYYY');
     const { user } = useAuthContext();
+    const handleMemoryChange = useContext(MemoryChangeContext);
 
     const handleDelete = () => {
         fetch(`http://localhost:5000/memories?delId=${id}`, {
@@ -37,7 +38,7 @@ function Memory({
                 displayInformationBox(data.message, "success");
             }
             console.log(data);
-            onMemoryChange();
+            handleMemoryChange();
 
         })
         .catch((error) => {
