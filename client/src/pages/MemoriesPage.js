@@ -26,7 +26,7 @@ function MemoriesPage() {
         })
         .then((response) => response.json())
         .then((data) => {
-            console.log(data.memories);
+            console.log("MEMORIES DATA", data.memories);
             if (data.type === "error") {
                 throw new Error(data.error);
             }
@@ -54,7 +54,7 @@ function MemoriesPage() {
 
     const handleMemoryChange = () => {
         setMemoryCount((prevCount) => prevCount + 1);
-      };
+    };
 
     useEffect(() => {
         getMemories();

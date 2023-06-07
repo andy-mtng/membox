@@ -12,11 +12,10 @@ function MemoryForm({ memoryToEdit, isEditing, displayInformationBox, onMemoryCh
     const { user } = useAuthContext();
     const formRef = useRef(null);
 
-    const handleSubmit = (e) => {
+    const handleSubmit =  (e) => {
         e.preventDefault();
         console.log("Title:", title, "Description:", description, "Date", date, "isCoreMemory", isCoreMemory);
         apiCall();
-        onMemoryChange();
     }
 
     const resetFields = () => {
@@ -59,6 +58,7 @@ function MemoryForm({ memoryToEdit, isEditing, displayInformationBox, onMemoryCh
             }
 
             console.log(data);
+            onMemoryChange();
         })
         .catch((error) => {
             if (error) {

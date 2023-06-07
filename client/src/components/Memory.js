@@ -36,15 +36,15 @@ function Memory({
             if (data.type === "success") {
                 displayInformationBox(data.message, "success");
             }
-
             console.log(data);
+            onMemoryChange();
+
         })
         .catch((error) => {
             if (error) {
                 displayInformationBox(error.message, "error");
             }
         });
-        onMemoryChange();
     }
 
     const handleEdit = (e) => {
