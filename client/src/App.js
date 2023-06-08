@@ -7,6 +7,7 @@ import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
 import LandingPage from "./pages/LandingPage";
 import MemoriesPage from "./pages/MemoriesPage";
+import ProfilePage from "./pages/ProfilePage";
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
               <Route path="/login" element={user ? <Navigate to="/memories"/> : <LoginPage/>}/>
               <Route path="/signup" element={user ? <Navigate to="/memories"/> : <SignupPage/>}/>
               <Route path="/memories" element={<MemoriesPage/>}/>
+              <Route path="/profile" element={<ProfilePage/>}/>
           </Routes>
       </BrowserRouter>
     </div>

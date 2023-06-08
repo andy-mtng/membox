@@ -9,6 +9,7 @@ function MemoryForm({ memoryToEdit, isEditing, displayInformationBox, setIsEditi
     const [description, setDescription] = useState(isEditing ? memoryToEdit.description : "");
     const [date, setDate] = useState(isEditing ? new Date(memoryToEdit.date) : new Date());
     const [isCoreMemory, setIsCoreMemory] = useState(isEditing ? memoryToEdit.isCoreMemory : false);
+    const [selectedPhoto, setSelectedPhoto] = useState(null);
     const [validationErrors, setValidationErrors] = useState([]);
     const { user } = useAuthContext();
     const formRef = useRef(null);
