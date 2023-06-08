@@ -1,5 +1,8 @@
 const User = require('../models/userModel')
 const jwt = require('jsonwebtoken')
+const multer = require("multer");
+
+const upload = multer({ dest: "upload/" });
 
 const createToken = (_id) => {
   return jwt.sign({_id}, process.env.SECRET, { expiresIn: '3d' })
@@ -37,4 +40,14 @@ const signupUser = async (req, res) => {
   }
 }
 
-module.exports = { signupUser, loginUser }
+const updateProfilePicture = (req, res) => {
+    const uploadedFile = req.file;
+    console.log(uploadedFile);
+    res.json('File uploaded!');
+}
+
+module.exports = { 
+  signupUser, 
+  loginUser,
+  updateProfilePicture
+}
