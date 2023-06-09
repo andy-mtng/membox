@@ -43,7 +43,7 @@ const updateProfilePicture = (req, res) => {
     console.log(user);
     console.log(req.file);
     const image = {
-      data: req.file.buffer,
+      data: req.file.buffer.toString('base64'),
       contentType: req.file.mimetype
     };
   
@@ -70,8 +70,34 @@ const updateProfilePicture = (req, res) => {
       })
 }
 
+const getProfilePicture = (req, res) => {
+  const user = req.user;
+  User.findOne({ _id: user._id })
+    .then((foundUser) => {
+      console.log(foundUser);
+      res.status(200).json({
+        profileImage: foundUser.profileImage,
+        message: "",
+        error: "",
+        validationErrors: "",
+        type: "success"
+      });
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(500).json({
+        profileImage: null,
+        message: "",
+        error: "Failed to fetch profile picture.",
+        validationErrors: "",
+        type: "error"
+    });
+    })
+}
+
 module.exports = { 
   signupUser, 
   loginUser,
-  updateProfilePicture
+  updateProfilePicture,
+  getProfilePicture
 }

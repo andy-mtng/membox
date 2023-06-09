@@ -6,7 +6,7 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 // controller functions
-const { loginUser, signupUser, updateProfilePicture } = require('../controllers/userController')
+const { loginUser, signupUser, updateProfilePicture, getProfilePicture } = require('../controllers/userController')
 
 const router = express.Router()
 
@@ -16,6 +16,8 @@ router.post('/login', loginUser)
 // signup route
 router.post('/signup', signupUser)
 
-router.post('/profile/image', upload.single('image'), requireAuth, updateProfilePicture)
+router.post('/profile/image', upload.single('image'), requireAuth, updateProfilePicture);
+
+router.get('/profile/image', requireAuth, getProfilePicture);
 
 module.exports = router;

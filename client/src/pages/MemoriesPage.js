@@ -19,8 +19,6 @@ function MemoriesPage() {
     const [memoryCount, setMemoryCount] = useState(0);
     const { user } = useAuthContext();
 
-
-    
     const getMemories = () => {
         fetch("http://localhost:5000/memories", {
             method: "GET",
