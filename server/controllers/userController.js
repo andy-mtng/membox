@@ -1,8 +1,6 @@
 const User = require('../models/userModel')
 const jwt = require('jsonwebtoken')
-const multer = require("multer");
 
-const upload = multer({ dest: "upload/" });
 
 const createToken = (_id) => {
   return jwt.sign({_id}, process.env.SECRET, { expiresIn: '3d' })
@@ -41,9 +39,35 @@ const signupUser = async (req, res) => {
 }
 
 const updateProfilePicture = (req, res) => {
-    const uploadedFile = req.file;
-    console.log(uploadedFile);
-    res.json('File uploaded!');
+    const user = req.user;
+    console.log(user);
+    console.log(req.file);
+    const image = {
+      data: req.file.buffer,
+      contentType: req.file.mimetype
+    };
+  
+    user.profileImage = image;
+
+    user.save()
+      .then((updatedUser) => {
+        console.log("New profile picture saved.");
+        res.status(200).json({
+          message: "Profile picture sucessfully updated.",
+          error: "",
+          validationErrors: "",
+          type: "success"
+        });
+      })
+      .catch((error) => {
+        console.log("Error saving profile picture to the DB.");
+        res.status(500).json({
+            message: "",
+            error: "An error occured saving the profile picture.",
+            validationErrors: "",
+            type: "error"
+        });
+      })
 }
 
 module.exports = { 

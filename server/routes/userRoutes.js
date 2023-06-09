@@ -1,7 +1,9 @@
 const express = require('express')
 const multer = require('multer');
+const requireAuth = require("../middleware/requireAuth");
 
-const upload = multer({ dest: "upload/" });
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 // controller functions
 const { loginUser, signupUser, updateProfilePicture } = require('../controllers/userController')
@@ -14,6 +16,6 @@ router.post('/login', loginUser)
 // signup route
 router.post('/signup', signupUser)
 
-router.post('/profile/image', upload.single('image'), updateProfilePicture)
+router.post('/profile/image', upload.single('image'), requireAuth, updateProfilePicture)
 
 module.exports = router;

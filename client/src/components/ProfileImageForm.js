@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import { useAuthContext, useAuthcontext } from "../hooks/useAuthContext";
 
 function ProfileImageForm() {
     const [selectedFile, setSelectedFile] = useState(null);
+    const { user } = useAuthContext();
 
     const handleFileUpload = () => {
         const formData = new FormData();
@@ -9,6 +11,9 @@ function ProfileImageForm() {
 
         fetch("http://localhost:5000/user/profile/image", {
             method: "POST",
+            headers: {
+                "Authorization": `Bearer ${user.token}`
+            },
             body: formData
         })
         .then((response) => {

@@ -8,7 +8,6 @@ function Sidebar() {
 
     const location = useLocation();
     const currentPage = location.pathname;
-    console.log("Current page", currentPage);
 
     const handleLogoutClick = (event) => {
         event.preventDefault();
