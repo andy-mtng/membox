@@ -97,7 +97,7 @@ function ProfilePage() {
             {showInformationBox && <InformationBox message={informationMessage} type={informationType}/>}
             <div className="ml-56">
                 <h1 className="pt-8 text-2xl font-bold">Profile</h1>
-                <img className="rounded-full h-60 w-60" src={profileImageData} alt="Image" />
+                <img className="rounded-full h-40 w-40" src={profileImageData} alt="Image" />
                 <ProfileImageForm onImageUpload={onImageUpload} displayInformationBox={displayInformationBox}/>
                 <button onClick={removeProfileImage} className="bg-gray-400">Remove Profile Image</button>
             </div>

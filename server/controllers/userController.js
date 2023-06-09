@@ -40,12 +40,14 @@ const signupUser = async (req, res) => {
 
 const updateProfilePicture = (req, res) => {
     const user = req.user;
+    console.log("req.file", req.file);
     const image = {
       data: req.file.buffer.toString('base64'),
       contentType: req.file.mimetype
     };
   
     user.profileImage = image;
+    console.log("serverside image", image);
 
     user.save()
       .then((updatedUser) => {

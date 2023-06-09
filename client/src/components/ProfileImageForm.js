@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuthContext, useAuthcontext } from "../hooks/useAuthContext";
 
 function ProfileImageForm({ onImageUpload, displayInformationBox }) {
@@ -16,6 +16,7 @@ function ProfileImageForm({ onImageUpload, displayInformationBox }) {
             body: formData
         })
         .then((response) => {
+            console.log("Image response", response);
             return response.json();
         })
         .then((data) => {
@@ -34,10 +35,24 @@ function ProfileImageForm({ onImageUpload, displayInformationBox }) {
         });
     }
 
+    const handleFileSelect = async (e) => {
+        console.log("immediate load");
+        const file = e.target.files[0]
+
+        if (file) {
+            console.log("set file");
+            setSelectedFile(file);
+        }
+    }
+
+    useEffect(() => {
+        handleFileUpload();
+    }, [selectedFile]);
+
     return (
         <div>
-            <input type="file" onChange={(e) => { setSelectedFile(e.target.files[0]) }} />
-            <button onClick={handleFileUpload}>Upload</button>
+            <input className="bg-gray-100" type="file" onChange={handleFileSelect} />
+            {/* <button onClick={handleFileUpload}>Upload</button> */}
         </div>
     )
 }
