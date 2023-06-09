@@ -12,7 +12,11 @@ function ProfilePage() {
     const [profileImageData, setProfileImageData] = useState("");
     const { user } = useAuthContext();
 
-    useEffect(() => {
+    const onImageUpload = (imageData) => {
+        getProfileImage();
+    }
+
+    const getProfileImage = () => {
         fetch("http://localhost:5000/user/profile/image", {
             method: "GET",
             headers: {
@@ -28,9 +32,7 @@ function ProfilePage() {
             }
 
             if (data.type === "success") {
-                console.log("success")
                 if (Object.keys(data.profileImage.data).length === 0) {
-                    console.log("DEFAULT")
                     setProfileImageData(DefaultProfileImage);
                 } else {
                     const imageData = data.profileImage.data;
@@ -45,6 +47,10 @@ function ProfilePage() {
                 displayInformationBox(error.message, "error");
             }
         })
+    } 
+
+    useEffect(() => {
+        getProfileImage();
     }, []);
 
     const displayInformationBox = (message, type) => {
@@ -58,6 +64,7 @@ function ProfilePage() {
     }
 
     const removeProfileImage = () => {
+        setProfileImageData(DefaultProfileImage);
         fetch("http://localhost:5000/user/profile/image", {
             method: "DELETE",
             headers: {
@@ -91,7 +98,7 @@ function ProfilePage() {
             <div className="ml-56">
                 <h1 className="pt-8 text-2xl font-bold">Profile</h1>
                 <img className="rounded-full h-60 w-60" src={profileImageData} alt="Image" />
-                <ProfileImageForm />
+                <ProfileImageForm onImageUpload={onImageUpload} displayInformationBox={displayInformationBox}/>
                 <button onClick={removeProfileImage} className="bg-gray-400">Remove Profile Image</button>
             </div>
         </div>
