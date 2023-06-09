@@ -40,8 +40,6 @@ const signupUser = async (req, res) => {
 
 const updateProfilePicture = (req, res) => {
     const user = req.user;
-    console.log(user);
-    console.log(req.file);
     const image = {
       data: req.file.buffer.toString('base64'),
       contentType: req.file.mimetype
@@ -74,7 +72,6 @@ const getProfilePicture = (req, res) => {
   const user = req.user;
   User.findOne({ _id: user._id })
     .then((foundUser) => {
-      console.log(foundUser);
       res.status(200).json({
         profileImage: foundUser.profileImage,
         message: "",
@@ -95,9 +92,38 @@ const getProfilePicture = (req, res) => {
     })
 }
 
+const removeProfileImage = (req, res) => {
+  const user = req.user;
+  user.profileImage = {
+    data: "",
+    contentType: ""
+  };
+
+  user.save()
+    .then((updatedUser) => {
+      console.log("Profile picture removed.");
+      res.status(200).json({
+        message: "Profile picture removed.",
+        error: "",
+        validationErrors: "",
+        type: "success"
+      });
+    })
+    .catch((error) => {
+      console.log("Error saving removing profile picture from the DB.");
+      res.status(500).json({
+          message: "",
+          error: "An error occured removing the profile picture.",
+          validationErrors: "",
+          type: "error"
+      });
+    })
+}
+
 module.exports = { 
   signupUser, 
   loginUser,
   updateProfilePicture,
-  getProfilePicture
+  getProfilePicture,
+  removeProfileImage
 }

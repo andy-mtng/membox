@@ -22,9 +22,15 @@ function ProfilePage() {
             return response.json();
         })
         .then((data) => {
-            const imageData = data.profileImage.data;
-            const contentType = data.profileImage.contentType;
-            setProfileImageData(`data:${contentType};base64,${imageData}`);
+            if (data.type === "error") {
+                throw new Error(data.error);
+            }
+
+            if (data.type === "success") {
+                const imageData = data.profileImage.data;
+                const contentType = data.profileImage.contentType;
+                setProfileImageData(`data:${contentType};base64,${imageData}`);
+            }
         })
         .catch((error) => {
             console.log(error);
@@ -44,14 +50,43 @@ function ProfilePage() {
         }, 5000);
     }
 
+    const removeProfileImage = () => {
+        setProfileImageData("");
+        fetch("http://localhost:5000/user/profile/image", {
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${user.token}`
+            }
+        })
+        .then((response) => {
+            return response.json();
+        })
+        .then((data) => {
+            if (data.type === "error") {
+                throw new Error(data.error);
+            }
+
+            if (data.type === "success") {
+                displayInformationBox(data.message, "success");
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+            if (error) {
+                displayInformationBox(error.message, "error");
+            }
+        })
+    }
+
     return (
         <div>
             <Sidebar />
             {showInformationBox && <InformationBox message={informationMessage} type={informationType}/>}
             <div className="ml-56">
-                <h1 className="px-5 py-8 text-2xl font-bold">Profile</h1>
-                <img src={profileImageData} alt="User Image" />
+                <h1 className="pt-8 text-2xl font-bold">Profile</h1>
+                <img className="rounded-full h-60 w-60" src={profileImageData} alt="User Image" />
                 <ProfileImageForm />
+                <button onClick={removeProfileImage} className="bg-gray-400">Remove Profile Image</button>
             </div>
         </div>
     )
