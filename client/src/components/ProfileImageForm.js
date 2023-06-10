@@ -16,7 +16,6 @@ function ProfileImageForm({ onImageUpload, displayInformationBox }) {
             body: formData
         })
         .then((response) => {
-            console.log("Image response", response);
             return response.json();
         })
         .then((data) => {
@@ -27,32 +26,34 @@ function ProfileImageForm({ onImageUpload, displayInformationBox }) {
 
             if (data.type === "success") { 
                 onImageUpload();
+                setSelectedFile(null);
                 displayInformationBox(data.message, "success");
             }
         })
         .catch((error) => {
-            console.log(error);
+            displayInformationBox(error.message, "error");
         });
     }
 
     const handleFileSelect = async (e) => {
-        console.log("immediate load");
         const file = e.target.files[0]
 
         if (file) {
-            console.log("set file");
             setSelectedFile(file);
         }
     }
 
     useEffect(() => {
-        handleFileUpload();
+        // Ensures handleFileUpload() only runs when there is a file selected (i.e. user wants to upload a photo)
+        // Without this handleFileUpload() runs everytime on page refresh incorrectly
+        if (selectedFile) {
+            handleFileUpload();
+        }
     }, [selectedFile]);
 
     return (
         <div>
             <input className="bg-gray-100" type="file" onChange={handleFileSelect} />
-            {/* <button onClick={handleFileUpload}>Upload</button> */}
         </div>
     )
 }
