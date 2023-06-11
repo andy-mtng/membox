@@ -28,8 +28,6 @@ const createMemory = (req, res) => {
     const user = req.user;
     const newMemory = req.body;
     newMemory.user_id = user._id;
-    console.log("New created memory:", newMemory);
-
     const newMemoryforDB = new memoryModel(newMemory);
     
     newMemoryforDB.save()

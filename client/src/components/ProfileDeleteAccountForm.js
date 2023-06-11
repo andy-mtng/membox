@@ -19,10 +19,16 @@ function ProfileDeleteAccountForm({ displayInformationBox }) {
             }
         })
         .then((data) => {
-            
+            if (data.type === "error") {
+                throw new Error(data.error);
+            }
+
+            if (data.type === "success") { 
+                displayInformationBox(data.message, "success");
+            }
         })
         .catch((error) => {
-            console.log(error);
+            displayInformationBox(error.error, "error");
         })
     }
 

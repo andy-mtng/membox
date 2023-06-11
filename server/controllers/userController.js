@@ -187,6 +187,7 @@ const deleteAccount = (req, res) => {
     .then(() => {
       memoryModel.deleteMany({user_id: user._id})
         .then(() => {
+          console.log("Account and memories deleted.")
           res.status(200).json({
             message: "Account and memrories deleted.",
             error: "",
@@ -195,6 +196,7 @@ const deleteAccount = (req, res) => {
           })
         })
         .catch((error) => {
+          console.log(error);
           res.status(500).json({
             message: "",
             error: "An error occured deleting the memories associated with the account.",
