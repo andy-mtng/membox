@@ -1,6 +1,7 @@
 const User = require('../models/userModel')
 const jwt = require('jsonwebtoken')
 
+
 const createToken = (_id) => {
   return jwt.sign({_id}, process.env.SECRET, { expiresIn: '3d' })
 }
@@ -37,16 +38,75 @@ const signupUser = async (req, res) => {
   }
 }
 
+const getHandle = (req, res) => {
+  const user = req.user;
+
+  User.findOne({ _id: user._id })
+    .then((foundUser) => {
+      res.status(200).json({ 
+        data: foundUser.handle,
+        message: "Handle sucessfully fetched.",
+        error: "",
+        validationErrors: "",
+        type: "success"    
+      });
+    })
+    .catch((error) => {
+      res.status(400).json({ 
+        message: "",
+        error: "An error occured updating your handle.",
+        validationErrors: "",
+        type: "error"
+       })
+    })
+}
+
+const updateHandle = async (req, res) => {
+  const user = req.user;
+  const newHandle = req.query.newHandle;
+
+  const exists = await User.findOne({ handle: newHandle });
+
+  if (exists) {
+    res.status(409).json({
+      message: "",
+      error: "Handle already in use.",
+      validationErrors: "",
+      type: "error"
+    });
+    return;
+  }
+
+  User.findByIdAndUpdate(user._id, { handle: newHandle })
+    .then(() => {
+      console.log("New profile handle saved.");
+      res.status(200).json({
+        message: "Handle sucessfully updated.",
+        error: "",
+        validationErrors: "",
+        type: "success"
+      });
+    })
+    .catch((error) => {
+      console.log("Error updating handle.", error);
+      res.status(500).json({
+          message: "",
+          error: "An error occured updating your handle.",
+          validationErrors: "",
+          type: "error"
+      });
+    })
+
+}
+
 const updateProfilePicture = (req, res) => {
     const user = req.user;
-    console.log("req.file", req.file);
     const image = {
       data: req.file.buffer.toString('base64'),
       contentType: req.file.mimetype
     };
   
     user.profileImage = image;
-    console.log("serverside image", image);
 
     user.save()
       .then((updatedUser) => {
@@ -126,5 +186,7 @@ module.exports = {
   loginUser,
   updateProfilePicture,
   getProfilePicture,
-  removeProfileImage
+  removeProfileImage,
+  updateHandle,
+  getHandle
 }

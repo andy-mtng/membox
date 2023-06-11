@@ -6,7 +6,15 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 // controller functions
-const { loginUser, signupUser, updateProfilePicture, getProfilePicture, removeProfileImage } = require('../controllers/userController')
+const { 
+    loginUser, 
+    signupUser, 
+    updateProfilePicture, 
+    getProfilePicture, 
+    removeProfileImage, 
+    updateHandle,
+    getHandle
+} = require('../controllers/userController')
 
 const router = express.Router()
 
@@ -21,5 +29,9 @@ router.post('/profile/image', upload.single('image'), requireAuth, updateProfile
 router.get('/profile/image', requireAuth, getProfilePicture);
 
 router.delete('/profile/image', requireAuth, removeProfileImage);
+
+router.put('/profile/handle', requireAuth, updateHandle);
+
+router.get('/profile/handle', requireAuth, getHandle);
 
 module.exports = router;

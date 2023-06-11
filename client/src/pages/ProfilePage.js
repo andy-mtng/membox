@@ -1,9 +1,10 @@
 import Sidebar from "../components/Sidebar";
-import ProfileImageForm from "../components/ProfileImageForm";
 import { useState, useEffect } from "react";
 import { useAuthContext } from "../hooks/useAuthContext";
 import InformationBox from "../components/InformationBox";
 import DefaultProfileImage from "../assets/default-profile.png"
+import ProfileImageForm from "../components/ProfileImageForm";
+import ProfileHandleForm from "../components/ProfileHandleForm";
 
 function ProfilePage() {
     const [showInformationBox, setShowInformationBox] = useState(false);
@@ -100,6 +101,7 @@ function ProfilePage() {
                 <img className="rounded-full h-40 w-40" src={profileImageData} alt="Image" />
                 <ProfileImageForm onImageUpload={onImageUpload} displayInformationBox={displayInformationBox}/>
                 <button onClick={removeProfileImage} className="bg-gray-400">Remove Profile Image</button>
+                <ProfileHandleForm displayInformationBox={displayInformationBox} />
             </div>
         </div>
     )

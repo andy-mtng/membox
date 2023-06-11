@@ -19,7 +19,6 @@ function ProfileImageForm({ onImageUpload, displayInformationBox }) {
             return response.json();
         })
         .then((data) => {
-            console.log(data);
             if (data.type === "error") {
                 throw new Error(data.error);
             }
