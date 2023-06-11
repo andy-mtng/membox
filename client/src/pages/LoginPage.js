@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useLogin } from "../hooks/useLogin"
 import { Link } from "react-router-dom";
+import PurpleCloudsCover from "../assets/purple-clouds.jpg"
 
 const LoginPage = () => {
   const [email, setEmail] = useState('bob@gmail.com')
@@ -51,7 +52,8 @@ const LoginPage = () => {
           </form>
           <h3 className="mt-4">New to Membox? <Link to="/signup" className="text-purple-600">Join now</Link></h3>
         </div>
-        <div className="bg-gray-200 fixed right-0 top-0 w-1/2 h-screen"></div>
+        {/* <div className="bg-gray-200 fixed right-0 top-0 w-1/2 h-screen"></div> */}
+        <img src={PurpleCloudsCover} className="object-cover fixed right-0 top-0 w-1/2 h-screen"></img>
       </div>
     </div>
   )
