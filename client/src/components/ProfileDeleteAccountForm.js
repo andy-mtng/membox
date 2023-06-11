@@ -1,6 +1,28 @@
+import { useAuthContext } from "../hooks/useAuthContext";
+import { useLogout } from "../hooks/useLogout";
+
 function ProfileDeleteAccountForm({ displayInformationBox }) {
+    const { user } = useAuthContext();
+    const { logout } = useLogout();
+    
     const deleteAccount = () => {
-        displayInformationBox("Deleted account", "success");
+        fetch("http://localhost:5000/user", {
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${user.token}`
+            }
+        })
+        .then((response) =>{
+            return response.json();
+        })
+        .then((data) => {
+            logout();
+            console.log(data);
+            
+        })
+        .catch((error) => {
+            console.log(error);
+        })
     }
 
     return (

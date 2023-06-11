@@ -97,7 +97,7 @@ function ProfilePage() {
         <div>
             <Sidebar />
             {showInformationBox && <InformationBox message={informationMessage} type={informationType}/>}
-            <div className="ml-56">
+            <div className="ml-56 h-screen">
                 <h1 className="pt-8 text-3xl font-bold">Profile</h1>
                 <img className="rounded-full h-40 w-40 mt-8" src={profileImageData} alt="Image" />
                 <ProfileImageForm removeProfileImage={removeProfileImage} onImageUpload={onImageUpload} displayInformationBox={displayInformationBox}/>

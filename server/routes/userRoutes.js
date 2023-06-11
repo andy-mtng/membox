@@ -13,7 +13,8 @@ const {
     getProfilePicture, 
     removeProfileImage, 
     updateHandle,
-    getHandle
+    getHandle,
+    deleteAccount
 } = require('../controllers/userController')
 
 const router = express.Router()
@@ -23,6 +24,8 @@ router.post('/login', loginUser)
 
 // signup route
 router.post('/signup', signupUser)
+
+router.delete("/", deleteAccount);
 
 router.post('/profile/image', upload.single('image'), requireAuth, updateProfilePicture);
 

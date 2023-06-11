@@ -1,8 +1,10 @@
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useState, useEffect } from "react";
+import { useLogout } from "../hooks/useLogout";
 
 function ProfileHandleForm({ displayInformationBox }) {
     const { user } = useAuthContext();
+    const { logout } = useLogout();
     const [handleData, setHandleData] = useState("");
 
     const getUserHandle = () => {

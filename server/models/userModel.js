@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 const validator = require('validator')
 const { uniqueNamesGenerator, adjectives, colors, animals } = require('unique-names-generator');
+const memoryModel = require("./memoryModel");
 
 const Schema = mongoose.Schema
 
@@ -85,5 +86,17 @@ userSchema.statics.login = async function(email, password) {
 
   return user
 }
+
+userSchema.pre("remove", async (next) => {
+  memoryModel.deleteMany({ user_id: this._id })
+    .then(() => {
+      console.log("Memories associated with user deleted.");
+      next();
+    })
+    .catch((error) => {
+      console.log("Error deleting memories associted with user");
+      next(error);
+    })
+})
 
 module.exports = mongoose.model('User', userSchema);

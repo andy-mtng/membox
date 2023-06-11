@@ -181,6 +181,17 @@ const removeProfileImage = (req, res) => {
     })
 }
 
+const deleteAccount = (req, res) => {
+  const user = req.user;
+  User.findByIdAndDelete({ _id: user._id })
+    .then(() => {
+      console.log("Deleted user.");
+    })
+    .catch((error) => {
+      console.log("Error deleting user.");
+    });
+}
+
 module.exports = { 
   signupUser, 
   loginUser,
@@ -188,5 +199,6 @@ module.exports = {
   getProfilePicture,
   removeProfileImage,
   updateHandle,
-  getHandle
+  getHandle,
+  deleteAccount
 }
