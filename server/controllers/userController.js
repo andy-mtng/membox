@@ -1,6 +1,6 @@
 const User = require('../models/userModel')
 const jwt = require('jsonwebtoken')
-
+const memoryModel = require("../models/memoryModel");
 
 const createToken = (_id) => {
   return jwt.sign({_id}, process.env.SECRET, { expiresIn: '3d' })
@@ -183,18 +183,28 @@ const removeProfileImage = (req, res) => {
 
 const deleteAccount = (req, res) => {
   const user = req.user;
-  console.log(user);
   User.findByIdAndDelete(user._id)
     .then(() => {
-      console.log("Deleted user.");
-      res.status(200).json({
-        message: "Account deleted.",
-        error: "",
-        validationErrors: "",
-        type: "success"
-      })
+      memoryModel.deleteMany({user_id: user._id})
+        .then(() => {
+          res.status(200).json({
+            message: "Account and memrories deleted.",
+            error: "",
+            validationErrors: "",
+            type: "success"
+          })
+        })
+        .catch((error) => {
+          res.status(500).json({
+            message: "",
+            error: "An error occured deleting the memories associated with the account.",
+            validationErrors: "",
+            type: "error"
+          });
+        })
     })
     .catch((error) => {
+      console.log(error);
       console.log("Error deleting user.");
       res.status(500).json({
         message: "",
