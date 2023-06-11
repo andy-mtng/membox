@@ -47,12 +47,20 @@ userSchema.statics.signup = async function(email, password) {
 
   const salt = await bcrypt.genSalt(10)
   const hash = await bcrypt.hash(password, salt)
+  let uniqueHandle = uniqueNamesGenerator({ dictionaries: [adjectives, colors, animals] })
+  let handleExists = await this.findOne({ handle: uniqueHandle });
+
+  while (handleExists) {
+    uniqueHandle = uniqueNamesGenerator({ dictionaries: [adjectives, colors, animals] })
+    handleExists = await this.findOne({ handle: uniqueHandle });
+  }
+
 
   const user = await this.create({ 
     email, 
     password: hash, 
     profileImage: { data: "", contentType: ""},
-    handle: uniqueNamesGenerator({ dictionaries: [adjectives, colors, animals] })
+    handle: uniqueHandle
   })
 
   return user
