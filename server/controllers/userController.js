@@ -183,12 +183,25 @@ const removeProfileImage = (req, res) => {
 
 const deleteAccount = (req, res) => {
   const user = req.user;
-  User.findByIdAndDelete({ _id: user._id })
+  console.log(user);
+  User.findByIdAndDelete(user._id)
     .then(() => {
       console.log("Deleted user.");
+      res.status(200).json({
+        message: "Account deleted.",
+        error: "",
+        validationErrors: "",
+        type: "success"
+      })
     })
     .catch((error) => {
       console.log("Error deleting user.");
+      res.status(500).json({
+        message: "",
+        error: "An error occured deleting the account.",
+        validationErrors: "",
+        type: "error"
+      });
     });
 }
 

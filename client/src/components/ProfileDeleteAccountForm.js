@@ -13,11 +13,12 @@ function ProfileDeleteAccountForm({ displayInformationBox }) {
             }
         })
         .then((response) =>{
-            return response.json();
+            if (response.ok) {
+                logout();
+                return response.json();
+            }
         })
         .then((data) => {
-            logout();
-            console.log(data);
             
         })
         .catch((error) => {

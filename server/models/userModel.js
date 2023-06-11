@@ -87,7 +87,7 @@ userSchema.statics.login = async function(email, password) {
   return user
 }
 
-userSchema.pre("remove", async (next) => {
+userSchema.pre("remove", async function(next) {
   memoryModel.deleteMany({ user_id: this._id })
     .then(() => {
       console.log("Memories associated with user deleted.");

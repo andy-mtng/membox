@@ -25,7 +25,7 @@ router.post('/login', loginUser)
 // signup route
 router.post('/signup', signupUser)
 
-router.delete("/", deleteAccount);
+router.delete("/", requireAuth, deleteAccount);
 
 router.post('/profile/image', upload.single('image'), requireAuth, updateProfilePicture);
 
