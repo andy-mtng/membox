@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useAuthContext, useAuthcontext } from "../hooks/useAuthContext";
 
-function ProfileImageForm({ onImageUpload, displayInformationBox }) {
+function ProfileImageForm({ onImageUpload, removeProfileImage, displayInformationBox }) {
     const [selectedFile, setSelectedFile] = useState(null);
     const { user } = useAuthContext();
 
@@ -52,7 +52,15 @@ function ProfileImageForm({ onImageUpload, displayInformationBox }) {
 
     return (
         <div>
-            <input className="bg-gray-100" type="file" onChange={handleFileSelect} />
+            <div>
+                <label className="bg-black" htmlFor="image-input">
+                    <div className="text-blue-700 cursor-pointer">
+                        Change Profile Picture
+                    </div>
+                </label>
+                <input id="image-input" className="hidden bg-gray-100 border border-gray-400" type="file" onChange={handleFileSelect} />
+            </div>
+            <button onClick={removeProfileImage} className="text-blue-700">Remove Profile Image</button>
         </div>
     )
 }

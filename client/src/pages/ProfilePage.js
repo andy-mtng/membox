@@ -5,6 +5,7 @@ import InformationBox from "../components/InformationBox";
 import DefaultProfileImage from "../assets/default-profile.png"
 import ProfileImageForm from "../components/ProfileImageForm";
 import ProfileHandleForm from "../components/ProfileHandleForm";
+import ProfileDeleteAccountForm from "../components/ProfileDeleteAccountForm";
 
 function ProfilePage() {
     const [showInformationBox, setShowInformationBox] = useState(false);
@@ -97,11 +98,16 @@ function ProfilePage() {
             <Sidebar />
             {showInformationBox && <InformationBox message={informationMessage} type={informationType}/>}
             <div className="ml-56">
-                <h1 className="pt-8 text-2xl font-bold">Profile</h1>
-                <img className="rounded-full h-40 w-40" src={profileImageData} alt="Image" />
-                <ProfileImageForm onImageUpload={onImageUpload} displayInformationBox={displayInformationBox}/>
-                <button onClick={removeProfileImage} className="bg-gray-400">Remove Profile Image</button>
+                <h1 className="pt-8 text-3xl font-bold">Profile</h1>
+                <img className="rounded-full h-40 w-40 mt-8" src={profileImageData} alt="Image" />
+                <ProfileImageForm removeProfileImage={removeProfileImage} onImageUpload={onImageUpload} displayInformationBox={displayInformationBox}/>
                 <ProfileHandleForm displayInformationBox={displayInformationBox} />
+                <div>
+                    <h1 className="mt-8 font-semibold text-2xl">Danger Zone</h1>
+                    <div className="border border-red-600 w-2/3 rounded-sm p-3">
+                        <ProfileDeleteAccountForm displayInformationBox={displayInformationBox} />
+                    </div>
+                </div>
             </div>
         </div>
     )
