@@ -1,6 +1,17 @@
 const User = require('../models/userModel')
 const jwt = require('jsonwebtoken')
 const memoryModel = require("../models/memoryModel");
+const sgMail = require('@sendgrid/mail');
+
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+const msg = {
+  to: 'andy.mtn1@gmail.com', // Change to your recipient
+  from: 'andynguyen9001@gmail.com', // Change to your verified sender
+  subject: 'Sending with SendGrid is Fun',
+  text: 'and easy to do anywhere, even with Node.js',
+  html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+}
 
 const createToken = (_id) => {
   return jwt.sign({_id}, process.env.SECRET, { expiresIn: '3d' })
@@ -181,6 +192,17 @@ const removeProfileImage = (req, res) => {
     })
 }
 
+const sendSignUpConfirmationEmail = (req, res) => {
+  sgMail
+    .send(msg)
+    .then(() => {
+      console.log('Email sent');
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}
+
 const deleteAccount = (req, res) => {
   const user = req.user;
   User.findByIdAndDelete(user._id)
@@ -225,5 +247,6 @@ module.exports = {
   removeProfileImage,
   updateHandle,
   getHandle,
-  deleteAccount
+  deleteAccount,
+  sendSignUpConfirmationEmail
 }

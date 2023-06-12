@@ -14,7 +14,8 @@ const {
     removeProfileImage, 
     updateHandle,
     getHandle,
-    deleteAccount
+    deleteAccount,
+    sendSignUpConfirmationEmail
 } = require('../controllers/userController')
 
 const router = express.Router()
@@ -23,7 +24,9 @@ const router = express.Router()
 router.post('/login', loginUser)
 
 // signup route
-router.post('/signup', signupUser)
+router.post('/signup', signupUser);
+
+router.post('/signup/confirmation', sendSignUpConfirmationEmail);
 
 router.delete("/", requireAuth, deleteAccount);
 
