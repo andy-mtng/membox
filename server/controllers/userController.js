@@ -39,6 +39,7 @@ const signupUser = async (req, res) => {
     const verificationLink = `http://localhost:5000/user/signup/confirmation?token=${tokenData}&email=${email}`;
     const signupToken = new Token({
       user_id: user._id,
+      email: email,
       token: tokenData,
       token_type: "signup",
     })
@@ -95,6 +96,22 @@ const verifyUserEmail = (req, res) => {
   const email = req.query.email;
   console.log("extractedToken", extractedToken);
   console.log("email", email);
+  Token.findOne({ email: email })
+    .then((foundToken) => {
+      if (foundToken.token === extractedToken) {
+        User.findByIdAndUpdate(foundToken.user_id, { emailIsVerified: true })
+          .then(() => {
+            console.log("Verification sucessful");
+          })
+          .catch((error) => {
+            console.log(error);
+            console.log("Verification failed");
+          })
+      }
+      else {
+        console.log("No match");
+      }
+    })
 }
 
 const getHandle = (req, res) => {
