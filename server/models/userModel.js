@@ -23,6 +23,10 @@ const userSchema = new Schema({
   handle: {
     type: String,
     required: true
+  },
+  emailIsVerified: {
+    type: Boolean,
+    required: true
   }
 })
 
@@ -56,12 +60,12 @@ userSchema.statics.signup = async function(email, password) {
     handleExists = await this.findOne({ handle: uniqueHandle });
   }
 
-
   const user = await this.create({ 
     email, 
     password: hash, 
     profileImage: { data: "", contentType: ""},
-    handle: uniqueHandle
+    handle: uniqueHandle,
+    emailIsVerified: false
   })
 
   return user

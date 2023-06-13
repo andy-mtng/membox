@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useSignup } from "../hooks/useSignup"
 import { Link } from "react-router-dom";
+import PurpleCloudsCover from "../assets/purple-clouds.jpg"
 
 const SignupPage = () => {
   const [email, setEmail] = useState('')
@@ -47,7 +48,7 @@ const SignupPage = () => {
             <button className="bg-purple-600 text-white text-sm px-3 py-2 rounded-sm" disabled={isLoading}>Sign up</button>
           </form>
         </div>
-        <div className="bg-gray-200 fixed right-0 top-0 w-1/2 h-screen"></div>
+        <img src={PurpleCloudsCover} className="object-cover fixed right-0 top-0 w-1/2 h-screen"></img>
       </div>
     </div>
   )

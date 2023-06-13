@@ -2,19 +2,6 @@ import Navbar from "../components/Navbar";
 import PersonStockImage from "../assets/person-stock-image.jpg";
 
 function LandingPage() {
-
-    const handleClick = () => {
-        fetch("http://localhost:5000/user/signup/confirmation", {
-            method: "POST"
-        })
-        .catch(() => {
-            console.log("Button clicked!");
-        })
-        .catch((error) => {
-            console.log(error);
-        })
-    }
-
     return (
         <div>
             <Navbar />
@@ -29,7 +16,6 @@ function LandingPage() {
                         <h3 className="text-gray-500 text-md">John Doe</h3>
                     </div>
                 </div>
-                <button onClick={handleClick} className="bg-gray-100 px-2 py-1">Test Email Button</button>
             </div>
         </div>
     )

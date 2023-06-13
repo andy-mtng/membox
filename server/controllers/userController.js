@@ -5,14 +5,6 @@ const sgMail = require('@sendgrid/mail');
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-const msg = {
-  to: 'andy.mtn1@gmail.com', // Change to your recipient
-  from: 'andynguyen9001@gmail.com', // Change to your verified sender
-  subject: 'Sending with SendGrid is Fun',
-  text: 'and easy to do anywhere, even with Node.js',
-  html: '<strong>and easy to do anywhere, even with Node.js</strong>',
-}
-
 const createToken = (_id) => {
   return jwt.sign({_id}, process.env.SECRET, { expiresIn: '3d' })
 }
@@ -36,17 +28,54 @@ const loginUser = async (req, res) => {
 // Signup a user
 const signupUser = async (req, res) => {
   const {email, password} = req.body
-
+  
   try {
     const user = await User.signup(email, password)
-
+    
     // Create a token
     const token = createToken(user._id)
+    const verificationLink = `http://localhost:5000/user/signup/confirmation?email=${email}`;
+    
+    const emailVerificationMessage = {
+      to: email, 
+      from: 'andynguyen9001@gmail.com', 
+      subject: 'Verify Your Membox Account',
+      text: `
+        Welcome to Membox!
 
-    res.status(200).json({email, token})
+        Please click the link below to verify your account:
+        ${verificationLink}
+
+        If you did not request this verification, please ignore this email.
+      `,
+      html: `
+        <h1>Welcome to Membox</h1>
+        <p>Please click the link below to verify your account:</p>
+        <a href=${verificationLink}>Verify Account</a>
+        <p>If you did not request this verification, please ignore this email.</p>
+      `,
+    }
+
+    sgMail
+      .send(emailVerificationMessage)
+      .then(() => {
+        console.log('Email sent');
+        res.status(200).json({email, token})
+      })
+      .catch((error) => {
+        res.status(400).json({error: error.message})
+      });
+
   } catch (error) {
     res.status(400).json({error: error.message})
   }
+}
+
+const verifyUserEmail = (req, res) => {
+  const extractedToken = req.query.token;
+  const email = req.query.email;
+  console.log("extractedToken", extractedToken);
+  console.log("email", email);
 }
 
 const getHandle = (req, res) => {
@@ -192,16 +221,16 @@ const removeProfileImage = (req, res) => {
     })
 }
 
-const sendSignUpConfirmationEmail = (req, res) => {
-  sgMail
-    .send(msg)
-    .then(() => {
-      console.log('Email sent');
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-}
+// const sendSignUpConfirmationEmail = (req, res) => {
+//   sgMail
+//     .send(msg)
+//     .then(() => {
+//       console.log('Email sent');
+//     })
+//     .catch((error) => {
+//       console.error(error);
+//     });
+// }
 
 const deleteAccount = (req, res) => {
   const user = req.user;
@@ -248,5 +277,5 @@ module.exports = {
   updateHandle,
   getHandle,
   deleteAccount,
-  sendSignUpConfirmationEmail
+  verifyUserEmail
 }
