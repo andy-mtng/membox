@@ -1,7 +1,9 @@
 const User = require('../models/userModel')
 const jwt = require('jsonwebtoken')
 const memoryModel = require("../models/memoryModel");
+const Token = require("../models/tokenModel");
 const sgMail = require('@sendgrid/mail');
+const { randomBytes } = require('crypto');
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
@@ -33,39 +35,56 @@ const signupUser = async (req, res) => {
     const user = await User.signup(email, password)
     
     // Create a token
-    const token = createToken(user._id)
-    const verificationLink = `http://localhost:5000/user/signup/confirmation?email=${email}`;
-    
-    const emailVerificationMessage = {
-      to: email, 
-      from: 'andynguyen9001@gmail.com', 
-      subject: 'Verify Your Membox Account',
-      text: `
-        Welcome to Membox!
+    const tokenData = randomBytes(32).toString('hex');
+    const verificationLink = `http://localhost:5000/user/signup/confirmation?token=${tokenData}&email=${email}`;
+    const signupToken = new Token({
+      user_id: user._id,
+      token: tokenData,
+      token_type: "signup",
+    })
 
-        Please click the link below to verify your account:
-        ${verificationLink}
-
-        If you did not request this verification, please ignore this email.
-      `,
-      html: `
-        <h1>Welcome to Membox</h1>
-        <p>Please click the link below to verify your account:</p>
-        <a href=${verificationLink}>Verify Account</a>
-        <p>If you did not request this verification, please ignore this email.</p>
-      `,
-    }
-
-    sgMail
-      .send(emailVerificationMessage)
+    signupToken.save()
       .then(() => {
-        console.log('Email sent');
-        res.status(200).json({email, token})
+        console.log("Signup token creation sucessful.")
+        const emailVerificationMessage = {
+          to: email, 
+          from: 'andynguyen9001@gmail.com', 
+          subject: 'Verify Your Membox Account',
+          text: `
+            Welcome to Membox!
+    
+            Please click the link below to verify your account:
+            ${verificationLink}
+    
+            If you did not request this verification, please ignore this email.
+          `,
+          html: `
+            <h1>Welcome to Membox</h1>
+            <p>Please click the link below to verify your account:</p>
+            <a href=${verificationLink}>Verify Account</a>
+            <p>If you did not request this verification, please ignore this email.</p>
+          `,
+        }
+    
+        sgMail
+          .send(emailVerificationMessage)
+          .then(() => {
+            console.log('Email sent');
+            res.status(200).json({
+              message: "Account verification email sent.",
+              error: "",
+              validationErrors: "",
+              type: "success"    
+            })
+          })
+          .catch((error) => {
+            res.status(400).json({error: error.message})
+          });
       })
       .catch((error) => {
-        res.status(400).json({error: error.message})
-      });
-
+        console.log("Error creating signup token")
+        throw new Error("Error creating signup token.")
+      })
   } catch (error) {
     res.status(400).json({error: error.message})
   }
