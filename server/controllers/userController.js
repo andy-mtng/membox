@@ -221,17 +221,6 @@ const removeProfileImage = (req, res) => {
     })
 }
 
-// const sendSignUpConfirmationEmail = (req, res) => {
-//   sgMail
-//     .send(msg)
-//     .then(() => {
-//       console.log('Email sent');
-//     })
-//     .catch((error) => {
-//       console.error(error);
-//     });
-// }
-
 const deleteAccount = (req, res) => {
   const user = req.user;
   User.findByIdAndDelete(user._id)
