@@ -30,16 +30,23 @@ const loginUser = async (req, res) => {
 // Signup a user
 const signupUser = async (req, res) => {
   const {email, password} = req.body
-  
   try {
     const user = await User.signup(email, password)
-    
+    sendVerificationEmail(user);
+    res.status(200).json({message: "Email sent for verification."})
+
+  } catch (error) {
+    res.status(400).json({error: error.message})
+  }
+}
+
+const sendVerificationEmail = (user) => {
     // Create a token
     const tokenData = randomBytes(32).toString('hex');
-    const verificationLink = `http://localhost:5000/user/signup/confirmation?token=${tokenData}&email=${email}`;
+    const verificationLink = `http://localhost:5000/user/signup/confirmation?token=${tokenData}&email=${user.email}`;
     const signupToken = new Token({
       user_id: user._id,
-      email: email,
+      email: user.email,
       token: tokenData,
       token_type: "signup",
     })
@@ -48,7 +55,7 @@ const signupUser = async (req, res) => {
       .then(() => {
         console.log("Signup token creation sucessful.")
         const emailVerificationMessage = {
-          to: email, 
+          to: user.email, 
           from: 'andynguyen9001@gmail.com', 
           subject: 'Verify Your Membox Account',
           text: `
@@ -71,15 +78,9 @@ const signupUser = async (req, res) => {
           .send(emailVerificationMessage)
           .then(() => {
             console.log('Email sent');
-            res.status(200).json({
-              message: "Account verification email sent.",
-              error: "",
-              validationErrors: "",
-              type: "success"    
-            })
           })
           .catch((error) => {
-            res.status(400).json({error: error.message})
+            console.log(error);
           });
       })
       .catch((error) => {
@@ -87,9 +88,6 @@ const signupUser = async (req, res) => {
         console.log(error);
         throw new Error("Error creating signup token.")
       })
-  } catch (error) {
-    res.status(400).json({error: error.message})
-  }
 }
 
 const verifyUserEmail = (req, res) => {

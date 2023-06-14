@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt')
 const validator = require('validator')
 const { uniqueNamesGenerator, adjectives, colors, animals } = require('unique-names-generator');
 const memoryModel = require("./memoryModel");
+const Token = require("./tokenModel");
 
 const Schema = mongoose.Schema
 
@@ -44,9 +45,24 @@ userSchema.statics.signup = async function(email, password) {
     throw Error('Password not strong enough')
   }
 
-  const exists = await this.findOne({ email })
+  const userExists = await this.findOne({ email })
 
-  if (exists) {
+  // User exists but has not verified their email
+  if (userExists && !userExists.emailIsVerified) {
+    Token.findOne({ user_id: userExists._id })
+      .then((foundToken) => {
+        if (!foundToken) {
+          // If user no longer has a token resend one
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+    return;
+  }
+  
+
+  if (userExists) {
     throw Error('Email already in use')
   }
 
