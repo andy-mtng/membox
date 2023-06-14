@@ -94,18 +94,30 @@ const signupUser = async (req, res) => {
 const verifyUserEmail = (req, res) => {
   const extractedToken = req.query.token;
   const email = req.query.email;
-  console.log("extractedToken", extractedToken);
-  console.log("email", email);
   Token.findOne({ email: email })
     .then((foundToken) => {
-      if (foundToken.token === extractedToken) {
+      if (foundToken.token === extractedToken && foundToken.token_type === "signup") {
         User.findByIdAndUpdate(foundToken.user_id, { emailIsVerified: true })
           .then(() => {
-            console.log("Verification sucessful");
+            console.log("Account verification successful.");
+            Token.deleteOne({ _id: foundToken._id })
+              .then(() => {
+                console.log("Token deletion successful.");
+              })
+              .catch((error) => {
+                console.log("Token deletion unsuccesful.");
+              })
+            res.redirect("http://localhost:3000/email-confirmation");
           })
           .catch((error) => {
             console.log(error);
             console.log("Verification failed");
+            res.status(400).json({
+              message: "",
+              error: "Email verification failed.",
+              validationErrors: "",
+              type: "error"            
+            })
           })
       }
       else {

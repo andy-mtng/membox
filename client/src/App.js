@@ -8,7 +8,7 @@ import LoginPage from "./pages/LoginPage";
 import LandingPage from "./pages/LandingPage";
 import MemoriesPage from "./pages/MemoriesPage";
 import ProfilePage from "./pages/ProfilePage";
-
+import EmailConfirmationPage from "./pages/EmailConfirmationPage";
 
 function App() {
   const { user } = useAuthContext();
@@ -22,6 +22,7 @@ function App() {
               <Route path="/signup" element={user ? <Navigate to="/memories"/> : <SignupPage/>}/>
               <Route path="/memories" element={<MemoriesPage/>}/>
               <Route path="/profile" element={<ProfilePage/>}/>
+              <Route path="/email-confirmation" element={<EmailConfirmationPage/>}/>
           </Routes>
       </BrowserRouter>
     </div>
