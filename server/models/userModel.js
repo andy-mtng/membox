@@ -4,6 +4,7 @@ const validator = require('validator')
 const { uniqueNamesGenerator, adjectives, colors, animals } = require('unique-names-generator');
 const memoryModel = require("./memoryModel");
 const Token = require("./tokenModel");
+const sendVerificationEmail = require("../utils/sendVerificationEmail");
 
 const Schema = mongoose.Schema
 
@@ -53,6 +54,7 @@ userSchema.statics.signup = async function(email, password) {
       .then((foundToken) => {
         if (!foundToken) {
           // If user no longer has a token resend one
+          sendVerificationEmail(userExists);
         }
       })
       .catch((error) => {

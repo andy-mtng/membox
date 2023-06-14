@@ -2,10 +2,7 @@ const User = require('../models/userModel')
 const jwt = require('jsonwebtoken')
 const memoryModel = require("../models/memoryModel");
 const Token = require("../models/tokenModel");
-const sgMail = require('@sendgrid/mail');
-const { randomBytes } = require('crypto');
-
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+const sendVerificationEmail = require("../utils/sendVerificationEmail");
 
 const createToken = (_id) => {
   return jwt.sign({_id}, process.env.SECRET, { expiresIn: '3d' })
@@ -40,61 +37,15 @@ const signupUser = async (req, res) => {
   }
 }
 
-const sendVerificationEmail = (user) => {
-    // Create a token
-    const tokenData = randomBytes(32).toString('hex');
-    const verificationLink = `http://localhost:5000/user/signup/confirmation?token=${tokenData}&email=${user.email}`;
-    const signupToken = new Token({
-      user_id: user._id,
-      email: user.email,
-      token: tokenData,
-      token_type: "signup",
-    })
-
-    signupToken.save()
-      .then(() => {
-        console.log("Signup token creation sucessful.")
-        const emailVerificationMessage = {
-          to: user.email, 
-          from: 'andynguyen9001@gmail.com', 
-          subject: 'Verify Your Membox Account',
-          text: `
-            Welcome to Membox!
-    
-            Please click the link below to verify your account:
-            ${verificationLink}
-    
-            If you did not request this verification, please ignore this email.
-          `,
-          html: `
-            <h1>Welcome to Membox</h1>
-            <p>Please click the link below to verify your account:</p>
-            <a href=${verificationLink}>Verify Account</a>
-            <p>If you did not request this verification, please ignore this email.</p>
-          `,
-        }
-    
-        sgMail
-          .send(emailVerificationMessage)
-          .then(() => {
-            console.log('Email sent');
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      })
-      .catch((error) => {
-        console.log("Error creating signup token")
-        console.log(error);
-        throw new Error("Error creating signup token.")
-      })
-}
-
 const verifyUserEmail = (req, res) => {
   const extractedToken = req.query.token;
   const email = req.query.email;
   Token.findOne({ email: email })
     .then((foundToken) => {
+      if (!foundToken) {
+        res.send("Token has expired.");
+      }
+
       if (foundToken.token === extractedToken && foundToken.token_type === "signup") {
         User.findByIdAndUpdate(foundToken.user_id, { emailIsVerified: true })
           .then(() => {
@@ -313,5 +264,6 @@ module.exports = {
   updateHandle,
   getHandle,
   deleteAccount,
-  verifyUserEmail
+  verifyUserEmail,
+  sendVerificationEmail
 }
