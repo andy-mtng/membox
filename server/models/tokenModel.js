@@ -20,12 +20,13 @@ const tokenSchema = new Schema({
         enum: ["password", "signup"],
         required: true
     },
-    expires: {
-        type: Date,
-        expires: 60 * 24 * 24
+    expiresAt: {
+        type: Date, 
+        default: Date.now,
+        required: true    
     }
-});
+}, {timestamps: true});
 
-tokenSchema.index({ expires: 1 }, { expireAfterSeconds: 0 });
+tokenSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 60 });
 
 module.exports = mongoose.model("Token", tokenSchema);

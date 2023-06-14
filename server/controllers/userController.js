@@ -84,6 +84,7 @@ const signupUser = async (req, res) => {
       })
       .catch((error) => {
         console.log("Error creating signup token")
+        console.log(error);
         throw new Error("Error creating signup token.")
       })
   } catch (error) {
