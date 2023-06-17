@@ -1,4 +1,5 @@
 const memoryModel = require("../models/memoryModel");
+const fs = require('fs');
 
 const getMemories = (req, res) => {
     const user = req.user;
@@ -28,36 +29,49 @@ const createMemory = (req, res) => {
     const user = req.user;
     const newMemory = req.body;
     newMemory.user_id = user._id;
+    const imageBuffer = fs.readFileSync(req.file.path);
+    newMemory.memoryImage = {
+        data: imageBuffer.toString("base64"),
+        contentType: req.file.mimetype
+    }
+
     const newMemoryforDB = new memoryModel(newMemory);
     
-    newMemoryforDB.save()
-        .then((savedMemory) => {
-            console.log("Memory saved to the DB.");
-            res.status(200).json({
-                message: "New memory created!",
-                error: "",
-                validationErrors: "",
-                type: "success"
-            });
-        })
-        .catch((error) => {
-            console.log("Error saving memory to the DB " + error);
-            // if (error instanceof mongoose.Error.validationErrors) {
-            //     res.status(500).json({
-            //         message: "",
-            //         error: "",
-            //         validationErrors: error.errors,
-            //         type: ""
-            //     });
-            // }
+    fs.unlink(req.file.path, (error) => {
+        if (error) {
+            console.log("Error deleting memory image.");
+        } else {
+            newMemoryforDB.save()
+                .then(() => {
+                    console.log("Memory saved to the DB.");
+                    res.status(200).json({
+                        message: "New memory created!",
+                        error: "",
+                        validationErrors: "",
+                        type: "success"
+                    });
+                })
+                .catch((error) => {
+                    console.log("Error saving memory to the DB " + error);
+                    // if (error instanceof mongoose.Error.validationErrors) {
+                    //     res.status(500).json({
+                    //         message: "",
+                    //         error: "",
+                    //         validationErrors: error.errors,
+                    //         type: ""
+                    //     });
+                    // }
+        
+                    res.status(500).json({
+                        message: "",
+                        error: "An error occured saving the memory.",
+                        validationErrors: "",
+                        type: "error"
+                    });
+                });
+        }
+    })
 
-            res.status(500).json({
-                message: "",
-                error: "An error occured saving the memory.",
-                validationErrors: "",
-                type: "error"
-            });
-        });
 }
 
 // Delete a memory

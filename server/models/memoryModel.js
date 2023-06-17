@@ -18,6 +18,10 @@ const memorySchema = new Schema({
         type: Boolean,
         required: true
     },
+    memoryImage: {
+        data: String,
+        contentType: String
+    },
     user_id: {
         type: String,
         required: true

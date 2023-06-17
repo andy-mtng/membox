@@ -9,12 +9,12 @@ function MemoryForm({ memoryToEdit, isEditing, displayInformationBox, setIsEditi
     const [description, setDescription] = useState(isEditing ? memoryToEdit.description : "");
     const [date, setDate] = useState(isEditing ? new Date(memoryToEdit.date) : new Date());
     const [isCoreMemory, setIsCoreMemory] = useState(isEditing ? memoryToEdit.isCoreMemory : false);
-    const [selectedPhoto, setSelectedPhoto] = useState(null);
+    const [selectedFile, setSelectedFile] = useState(null);
     const [validationErrors, setValidationErrors] = useState([]);
     const { user } = useAuthContext();
     const formRef = useRef(null);
     const handleMemoryChange = useContext(MemoryChangeContext);
-
+ 
     const handleSubmit =  (e) => {
         e.preventDefault();
         console.log("Title:", title, "Description:", description, "Date", date, "isCoreMemory", isCoreMemory);
@@ -26,23 +26,23 @@ function MemoryForm({ memoryToEdit, isEditing, displayInformationBox, setIsEditi
         setDescription("");
         setDate(new Date());
         setIsCoreMemory(false);
+        setSelectedFile(null);
     }
 
     const apiCall = () => {
-        const newMemory = {
-            title: title,
-            description: description,
-            isCoreMemory: isCoreMemory,
-            date: date
-        }
+        const newMemory = new FormData();
+        newMemory.append("title", title);
+        newMemory.append("description", description);
+        newMemory.append("date", date);
+        newMemory.append("isCoreMemory", isCoreMemory);
+        newMemory.append("image", selectedFile);
 
         fetch(isEditing ? `http://localhost:5000/memories?editId=${memoryToEdit.id}` : "http://localhost:5000/memories", {
             method: isEditing ? "PUT" : "POST",
             headers: {
-                "Content-Type": "application/json",
                 "Authorization": `Bearer ${user.token}`
             },
-            body: JSON.stringify(newMemory)
+            body: newMemory
         })
         .then((response) => {
             return response.json();
@@ -83,6 +83,14 @@ function MemoryForm({ memoryToEdit, isEditing, displayInformationBox, setIsEditi
             setIsEditing(false);
         }
     }
+
+    const handleFileSelect = async (e) => {
+        const file = e.target.files[0]
+
+        if (file) {
+            setSelectedFile(file);
+        }
+    }
     
     useEffect(() => {
         document.addEventListener("mousedown", handleClickOutside);
@@ -98,6 +106,8 @@ function MemoryForm({ memoryToEdit, isEditing, displayInformationBox, setIsEditi
                 onSubmit={handleSubmit}
                 className="flex flex-col gap-4"
                 >
+
+                {/* Title field */}
                 <div className="flex flex-col gap-1">
                     <label className="text-sm" htmlFor="titleInput">Title</label>
                     <input
@@ -108,6 +118,8 @@ function MemoryForm({ memoryToEdit, isEditing, displayInformationBox, setIsEditi
                         onChange={(e) => { setTitle(e.target.value) }}
                     />
                 </div>
+
+                {/* Description field */}
                 <div className="flex flex-col gap-1">
                     <label className="text-sm" htmlFor="descInput">Description</label>
                     <textarea
@@ -120,6 +132,14 @@ function MemoryForm({ memoryToEdit, isEditing, displayInformationBox, setIsEditi
                         onChange={(e) => { setDescription(e.target.value) }}
                     />
                 </div>
+
+                {/* Image field */}
+                <div className="flex flex-col gap-1">
+                    <label className="" htmlFor="image-input">Image</label>
+                    <input id="image-input" className="bg-gray-100 border border-gray-400" type="file" onChange={handleFileSelect} />
+                </div>
+
+                {/* Date field */}
                 <div className="flex flex-col gap-1">
                     <h1 className="text-sm">Date</h1>
                     <DatePicker className="rounded-sm text-sm bg-gray-50 w-full border border-gray-300 p-1" selected={date} onChange={(dateInput) => setDate(dateInput)} />
