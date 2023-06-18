@@ -13,12 +13,14 @@ function ProfilePage() {
     const [informationType, setInformationType] = useState('');
     const [profileImageData, setProfileImageData] = useState("");
     const { user } = useAuthContext();
+    const [profileImageIsLoading, setProfileImageIsLoading] = useState(false);
 
     const onImageUpload = (imageData) => {
         getProfileImage();
     }
 
     const getProfileImage = () => {
+        setProfileImageIsLoading(true);
         fetch("http://localhost:5000/user/profile/image", {
             method: "GET",
             headers: {
@@ -49,6 +51,7 @@ function ProfilePage() {
                 displayInformationBox(error.message, "error");
             }
         })
+        .finally(() => setProfileImageIsLoading(false));
     } 
 
     useEffect(() => {
@@ -101,7 +104,11 @@ function ProfilePage() {
             </div>
             <div className="col-span-5 h-screen p-6">
                 <div className="flex items-center gap-4">
-                    <img className="border-2 border-gray-300 rounded-full h-40 w-40" src={profileImageData} alt="Image" />
+                    {profileImageIsLoading ? 
+                        <img className="border-2 border-gray-300 bg-gray-100 rounded-full h-40 w-40" /> 
+                        :
+                        <img className="border-2 border-gray-300 rounded-full h-40 w-40" src={profileImageData} alt="Profile image" />
+                    }
                     <ProfileImageForm removeProfileImage={removeProfileImage} onImageUpload={onImageUpload} displayInformationBox={displayInformationBox}/>
                 </div>
                 <h1 className="mt-8 font-semibold text-xl">Account Information</h1>

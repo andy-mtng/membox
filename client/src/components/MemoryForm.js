@@ -135,8 +135,8 @@ function MemoryForm({ memoryToEdit, isEditing, displayInformationBox, setIsEditi
 
                 {/* Image field */}
                 <div className="flex flex-col gap-1">
-                    <label className="" htmlFor="image-input">Image</label>
-                    <input id="image-input" className="bg-gray-100 border border-gray-400" type="file" onChange={handleFileSelect} />
+                    <label className="text-sm" htmlFor="image-input">Image</label>
+                    <input id="image-input" className="text-sm bg-gray-50 border border-gray-300 rounded-sm" type="file" onChange={handleFileSelect} />
                 </div>
 
                 {/* Date field */}
