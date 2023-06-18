@@ -52,15 +52,15 @@ function ProfileImageForm({ onImageUpload, removeProfileImage, displayInformatio
 
     return (
         <div>
-            <div>
+            <div className="mb-2">
                 <label className="bg-black" htmlFor="image-input">
-                    <div className="text-blue-700 cursor-pointer">
-                        Change Profile Picture
+                    <div className="text-white bg-purple-600 border border-purple-700 rounded-md px-2 py-1 cursor-pointer">
+                        Change Picture
                     </div>
                 </label>
                 <input id="image-input" className="hidden bg-gray-100 border border-gray-400" type="file" onChange={handleFileSelect} />
             </div>
-            <button onClick={removeProfileImage} className="text-blue-700">Remove Profile Image</button>
+            <button onClick={removeProfileImage} className="text-black border border-gray-400 rounded-md px-2 py-1">Remove Picture</button>
         </div>
     )
 }

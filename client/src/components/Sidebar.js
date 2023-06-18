@@ -3,7 +3,6 @@ import { useAuthContext } from "../hooks/useAuthContext";
 import { useLogout } from "../hooks/useLogout";
 
 function Sidebar() {
-    const { user } = useAuthContext();
     const { logout } = useLogout();
 
     const location = useLocation();
@@ -17,7 +16,7 @@ function Sidebar() {
     const sideBarItemStyles = "flex gap-2 items-center hover:bg-gray-100 rounded-md"
 
     return (
-        <div className="fixed h-full border-r border-gray-300 px-6 flex flex-col justify-between ml-auto w-55">
+        <div className="fixed h-full border-r border-gray-300 px-6 flex flex-col justify-between w-1/6">
             <div className="flex flex-col gap-5">
                 <Link to="/memories" className="flex gap-2 items-center relative mt-8 text-base mb-6">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-7 h-7">

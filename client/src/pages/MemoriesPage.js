@@ -62,43 +62,45 @@ function MemoriesPage() {
     }, [memoryCount]);
 
     return (
-        <div className="h-screen">
-            <Sidebar />
+        <div className="grid grid-cols-6 gap-4">
             {showInformationBox && <InformationBox message={informationMessage} type={informationType}/>}
-            {/* <h1 className="font-bold text-2xl">Welcome back, Bob!</h1> */}
-            <button className="fixed bottom-6 right-6 rounded-full px-4 py-4 bg-green-800 z-50" onClick={() => { setIsAdding(true) }}>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-6 h-6 font-bold text-green-300">
-                    <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
-                </svg>
-            </button>
-
-            <MemoryChangeContext.Provider value={handleMemoryChange}>
-                <div className="grid grid-cols-3 ml-52 p-5 gap-8">
-                    {memories.map(memory => {
-                        return <Memory
-                                    key={memory._id}
-                                    id={memory._id}
-                                    title={memory.title}
-                                    description={memory.description}
-                                    date={memory.date}
-                                    isCoreMemory={memory.isCoreMemory}
-                                    memoryImage={memory.memoryImage}
-                                    setIsEditing={setIsEditing}
-                                    displayInformationBox={displayInformationBox}
-                                    memoryToEdit={memoryToEdit}
-                                    setMemoryToEdit={setMemoryToEdit}
-                                />
-                    })}
-                </div>
-                {(isAdding || isEditing) &&
-                <MemoryForm
-                    isEditing={isEditing}
-                    setIsEditing={setIsEditing}
-                    setIsAdding={setIsAdding}
-                    displayInformationBox={displayInformationBox} 
-                    memoryToEdit={memoryToEdit}
-                />} 
-            </MemoryChangeContext.Provider>
+            <div className="col-span-1">
+                <Sidebar />
+            </div>
+            <div className="col-span-5">
+                <button className="fixed bottom-6 right-6 rounded-full px-4 py-4 bg-green-800 z-50" onClick={() => { setIsAdding(true) }}>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-6 h-6 font-bold text-green-300">
+                        <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+                    </svg>
+                </button>
+                <MemoryChangeContext.Provider value={handleMemoryChange}>
+                    <div className="grid grid-cols-3 gap-8 p-6">
+                        {memories.map(memory => {
+                            return <Memory
+                                        key={memory._id}
+                                        id={memory._id}
+                                        title={memory.title}
+                                        description={memory.description}
+                                        date={memory.date}
+                                        isCoreMemory={memory.isCoreMemory}
+                                        memoryImage={memory.memoryImage}
+                                        setIsEditing={setIsEditing}
+                                        displayInformationBox={displayInformationBox}
+                                        memoryToEdit={memoryToEdit}
+                                        setMemoryToEdit={setMemoryToEdit}
+                                    />
+                        })}
+                    </div>
+                    {(isAdding || isEditing) &&
+                    <MemoryForm
+                        isEditing={isEditing}
+                        setIsEditing={setIsEditing}
+                        setIsAdding={setIsAdding}
+                        displayInformationBox={displayInformationBox}
+                        memoryToEdit={memoryToEdit}
+                    />}
+                </MemoryChangeContext.Provider>
+            </div>
         </div>
     );
 }

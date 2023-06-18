@@ -34,8 +34,8 @@ function ProfileDeleteAccountForm({ displayInformationBox }) {
 
     return (
         <div>
-            <h1>Deleting your account is permanent. This action cannot be undone.</h1>
-            <button onClick={deleteAccount} className="bg-red-200 border border-red-600 text-red-800 px-3 py-1 rounded-sm">Delete Account</button>
+            <h1 className="mb-2">Deleting your account is permanent. This action cannot be undone.</h1>
+            <button onClick={deleteAccount} className="bg-red-700 border border-red-600 text-white px-3 py-1 rounded-md">Delete Account</button>
         </div>
     )
 }

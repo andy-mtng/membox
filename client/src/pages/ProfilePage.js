@@ -94,16 +94,20 @@ function ProfilePage() {
     }
 
     return (
-        <div>
-            <Sidebar />
+        <div className="grid grid-cols-6 gap-4">
             {showInformationBox && <InformationBox message={informationMessage} type={informationType}/>}
-            <div className="ml-56 h-screen">
-                <h1 className="pt-8 text-3xl font-bold">Profile</h1>
-                <img className="rounded-full h-40 w-40 mt-8" src={profileImageData} alt="Image" />
-                <ProfileImageForm removeProfileImage={removeProfileImage} onImageUpload={onImageUpload} displayInformationBox={displayInformationBox}/>
+            <div className="col-span-1">
+                <Sidebar />
+            </div>
+            <div className="col-span-5 h-screen p-6">
+                <div className="flex items-center gap-4">
+                    <img className="border-2 border-gray-300 rounded-full h-40 w-40" src={profileImageData} alt="Image" />
+                    <ProfileImageForm removeProfileImage={removeProfileImage} onImageUpload={onImageUpload} displayInformationBox={displayInformationBox}/>
+                </div>
+                <h1 className="mt-8 font-semibold text-xl">Account Information</h1>
                 <ProfileHandleForm displayInformationBox={displayInformationBox} />
                 <div>
-                    <h1 className="mt-8 font-semibold text-2xl">Danger Zone</h1>
+                    <h1 className="mt-8 mb-4 font-semibold text-xl">Danger Zone</h1>
                     <div className="border border-red-600 w-2/3 rounded-sm p-3">
                         <ProfileDeleteAccountForm displayInformationBox={displayInformationBox} />
                     </div>
