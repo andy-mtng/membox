@@ -100,7 +100,7 @@ function MemoryForm({ memoryToEdit, isEditing, displayInformationBox, setIsEditi
     }, []);
 
     return (
-        <div ref={formRef} className="h-auto w-96 border-2 shadow-lg border-gray-100 bg-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-8">
+        <div ref={formRef} className="h-auto w-96 border-2 shadow-lg border-gray-100 bg-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-8 z-50">
             <h1 className="font-xl font-bold mb-3">{isEditing ? "Edit Memory" : "Add a New Memory"}</h1>
             <form
                 onSubmit={handleSubmit}

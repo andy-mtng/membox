@@ -71,7 +71,6 @@ const createMemory = (req, res) => {
                 });
         }
     })
-
 }
 
 // Delete a memory

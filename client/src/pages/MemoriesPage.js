@@ -82,6 +82,7 @@ function MemoriesPage() {
                                     description={memory.description}
                                     date={memory.date}
                                     isCoreMemory={memory.isCoreMemory}
+                                    memoryImage={memory.memoryImage}
                                     setIsEditing={setIsEditing}
                                     displayInformationBox={displayInformationBox}
                                     memoryToEdit={memoryToEdit}

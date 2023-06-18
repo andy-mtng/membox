@@ -18,10 +18,10 @@ function MemoryDropDown({ handleDelete, handleEdit }) {
     }, []);
 
     return (
-        <div ref={dropdownRef} className="absolute top-2 right-2">
+        <div ref={dropdownRef} className="absolute top-2 right-2 z-50">
             <div className="relative">
                 <div className="font-semibold text-2xl w-7 rounded-sm flex h-5 items-center justify-center cursor-pointer" onClick={() => { setIsOpen(!isOpen) }}>
-                    <p>...</p>
+                    <p className="text-white">...</p>
                 </div>
                 {isOpen && (
                     <div className="flex flex-col items-start border p-2 rounded-sm border-gray-300 bg-white absolute top-2 right-0">
