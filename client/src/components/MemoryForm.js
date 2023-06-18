@@ -10,7 +10,7 @@ function MemoryForm({ memoryToEdit, isEditing, displayInformationBox, setIsEditi
     const [date, setDate] = useState(isEditing ? new Date(memoryToEdit.date) : new Date());
     const [isCoreMemory, setIsCoreMemory] = useState(isEditing ? memoryToEdit.isCoreMemory : false);
     const [selectedFile, setSelectedFile] = useState(null);
-    const [validationErrors, setValidationErrors] = useState([]);
+    // const [validationErrors, setValidationErrors] = useState([]);
     const { user } = useAuthContext();
     const formRef = useRef(null);
     const handleMemoryChange = useContext(MemoryChangeContext);
@@ -52,9 +52,9 @@ function MemoryForm({ memoryToEdit, isEditing, displayInformationBox, setIsEditi
                 throw new Error(data.error);
             }
             
-            if (data.validationErrors) {
-                setValidationErrors(data.validationErrors)
-            }
+            // if (data.validationErrors) {
+            //     setValidationErrors(data.validationErrors)
+            // }
 
             if (data.type === "success") {
                 displayInformationBox(data.message, "success");

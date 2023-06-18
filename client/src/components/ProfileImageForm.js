@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useAuthContext, useAuthcontext } from "../hooks/useAuthContext";
+import { useAuthContext } from "../hooks/useAuthContext";
 
 function ProfileImageForm({ onImageUpload, removeProfileImage, displayInformationBox }) {
     const [selectedFile, setSelectedFile] = useState(null);
