@@ -5,7 +5,6 @@ const requireAuth = require("../middleware/requireAuth");
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-// controller functions
 const { 
     loginUser, 
     signupUser, 
@@ -20,10 +19,8 @@ const {
 
 const router = express.Router()
 
-// login route
 router.post('/login', loginUser)
 
-// signup route
 router.post('/signup', signupUser);
 
 router.get('/signup/confirmation', verifyUserEmail);

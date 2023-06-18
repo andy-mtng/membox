@@ -13,7 +13,6 @@ const storage = multer.diskStorage({
         cb(null, file.fieldname + '-' + uniqueSuffix);
     }
 });
-// const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 router.use(requireAuth);

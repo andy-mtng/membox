@@ -53,15 +53,6 @@ const createMemory = (req, res) => {
                 })
                 .catch((error) => {
                     console.log("Error saving memory to the DB " + error);
-                    // if (error instanceof mongoose.Error.validationErrors) {
-                    //     res.status(500).json({
-                    //         message: "",
-                    //         error: "",
-                    //         validationErrors: error.errors,
-                    //         type: ""
-                    //     });
-                    // }
-        
                     res.status(500).json({
                         message: "",
                         error: "An error occured saving the memory.",
@@ -73,7 +64,6 @@ const createMemory = (req, res) => {
     })
 }
 
-// Delete a memory
 const deleteMemory = (req, res) => {
     const delId = req.query.delId;
     memoryModel.deleteOne({ _id: delId })
@@ -97,7 +87,6 @@ const deleteMemory = (req, res) => {
         });
 } 
 
-// Edit a memory
 const editMemory = (req, res) => {
     const editId = req.query.editId;
     const editedMemory = req.body;

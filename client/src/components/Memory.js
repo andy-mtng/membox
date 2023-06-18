@@ -1,7 +1,7 @@
 import moment from 'moment';
 import MemoryDropDown from "./MemoryDropDown";
 import { useAuthContext } from "../hooks/useAuthContext";
-import { useState, useContext } from "react";
+import { useContext } from "react";
 import MemoryChangeContext from '../context/MemoryChangeContext';
 
 function Memory({ 
@@ -11,7 +11,6 @@ function Memory({
             description, 
             date, 
             isCoreMemory, 
-            memoryToEdit,
             setMemoryToEdit,
             memoryImage,
             displayInformationBox }) {
@@ -38,9 +37,7 @@ function Memory({
             if (data.type === "success") {
                 displayInformationBox(data.message, "success");
             }
-            console.log(data);
             handleMemoryChange();
-
         })
         .catch((error) => {
             if (error) {
