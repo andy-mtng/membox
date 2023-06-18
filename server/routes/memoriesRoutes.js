@@ -24,6 +24,6 @@ router.post("/", upload.single('image'), memoriesController.createMemory);
 
 router.delete("/", memoriesController.deleteMemory);
 
-router.put("/", memoriesController.editMemory);
+router.put("/", upload.single('image'), memoriesController.editMemory);
 
 module.exports = router;

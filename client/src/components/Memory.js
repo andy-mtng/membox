@@ -63,7 +63,7 @@ function Memory({
     }
  
     return (
-        <div className={`box-border relative shadow-sm w-80 h-60 ${isCoreMemory ? "border-2 border-yellow-400" : "border border-gray-200"}`}>
+        <div className={`box-border relative shadow-md w-80 h-60 ${isCoreMemory ? "border-2 border-yellow-400" : "border border-gray-200"}`}>
             <MemoryDropDown handleDelete={handleDelete} handleEdit={handleEdit} setIsEditing={setIsEditing}/>
             <div className="relative h-2/3 overflow-hidden">
                 <img className="w-full h-auto object-cover absolute left-0 top-0" src={`data:${memoryImage.contentType};base64,${memoryImage.data}`}/>

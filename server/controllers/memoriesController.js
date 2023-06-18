@@ -101,6 +101,24 @@ const deleteMemory = (req, res) => {
 const editMemory = (req, res) => {
     const editId = req.query.editId;
     const editedMemory = req.body;
+    console.log("editID", editId);
+    console.log("editedMemory", editedMemory);
+    console.log("req.file", req.file);
+
+    if (req.file) {
+        const imageBuffer = fs.readFileSync(req.file.path);
+        editedMemory.memoryImage = {
+            data: imageBuffer.toString("base64"),
+            contentType: req.file.mimetype
+        }
+
+        fs.unlink(req.file.path, (error) => {
+            if (error) {
+                console.log("Error deleting temporary image while editing memory.");
+            }
+        });
+    }
+
     memoryModel.updateOne({ _id: editId }, editedMemory)
         .then(() => {
             console.log("Memory edited in the DB.");
