@@ -118,6 +118,7 @@ const updateHandle = async (req, res) => {
           });
       })
     .catch((error) => {
+      // Validation error occured
       if (error.isJoi) {
         return res.status(400).json({
           message: "",

@@ -7,6 +7,8 @@ function ProfileHandleForm({ displayInformationBox }) {
     const [handleData, setHandleData] = useState("");
     const { register, formState: { errors }, handleSubmit } = useForm();
     const [loading, setLoading] = useState(false);
+    // Validation errors from the server side
+    const [validationErrors, setValidationErrors] = useState([]);
 
     const getUserHandle = () => {
         setLoading(true);
@@ -53,6 +55,11 @@ function ProfileHandleForm({ displayInformationBox }) {
             return response.json();
         })
         .then((data) => {
+            if (data.validationErrors) {
+                console.log("Client has recieved.", data.validationErrors);
+                setValidationErrors(data.validationErrors);
+            }
+
             if (data.type === "error") {
                 throw new Error(data.error);
             }
@@ -89,6 +96,9 @@ function ProfileHandleForm({ displayInformationBox }) {
                         })} />
                     <p className="text-sm text-red-600">{errors.handle?.message}</p> 
                 </div> 
+                {validationErrors.map((validationError, index) => {
+                    return <p className="text-sm text-red-600" key={index}>{validationError.message}</p>
+                })}
                 <button type="submit" className="mt-5 bg-purple-600 px-4 py-1 rounded-md border border-purple-800 text-white">Submit</button>
             </form>
         </div>
