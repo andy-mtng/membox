@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken')
 const memoryModel = require("../models/memoryModel");
 const Token = require("../models/tokenModel");
 const sendVerificationEmail = require("../utils/sendVerificationEmail");
+const handleSchema = require("../schemaValidation/handleSchema");
 
 const createToken = (_id) => {
   return jwt.sign({_id}, process.env.SECRET, { expiresIn: '3d' })
@@ -103,37 +104,37 @@ const updateHandle = async (req, res) => {
   const user = req.user;
   const newHandle = req.query.newHandle;
 
-  const exists = await User.findOne({ handle: newHandle });
-
-  if (exists) {
-    res.status(409).json({
-      message: "",
-      error: "Handle already in use.",
-      validationErrors: "",
-      type: "error"
-    });
-    return;
-  }
-
-  User.findByIdAndUpdate(user._id, { handle: newHandle })
+  handleSchema.validateAsync({ handle: newHandle }, { abortEarly: false })
     .then(() => {
-      console.log("New profile handle saved.");
-      res.status(200).json({
-        message: "Handle sucessfully updated.",
-        error: "",
-        validationErrors: "",
-        type: "success"
-      });
+      return User.findByIdAndUpdate(user._id, { handle: newHandle });
     })
+    .then(() => {
+          console.log("New profile handle saved.");
+          res.status(200).json({
+            message: "Handle sucessfully updated.",
+            error: "",
+            validationErrors: "",
+            type: "success"
+          });
+      })
     .catch((error) => {
-      console.log("Error updating handle.", error);
-      res.status(500).json({
+      if (error.isJoi) {
+        return res.status(400).json({
           message: "",
-          error: "An error occured updating your handle.",
-          validationErrors: "",
-          type: "error"
-      });
+          error: "",
+          validationErrors: error.details,
+          type: "validationError"
+        });      
+      } else {
+          return res.status(500).json({
+              message: "",
+              error: "An error occured updating your handle.",
+              validationErrors: "",
+              type: "error"
+          });    
+      }
     })
+
 
 }
 
