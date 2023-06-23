@@ -1,5 +1,6 @@
 const memoryModel = require("../models/memoryModel");
 const fs = require('fs');
+const memorySchema = require("../schemaValidation/memorySchema");
 
 const getMemories = (req, res) => {
     const user = req.user;
@@ -34,6 +35,9 @@ const createMemory = (req, res) => {
         data: imageBuffer.toString("base64"),
         contentType: req.file.mimetype
     }
+
+    const validationResult = memorySchema.validate(newMemory);
+    console.log("Server-side validation result", validationResult);
 
     const newMemoryforDB = new memoryModel(newMemory);
     
