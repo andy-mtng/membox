@@ -3,6 +3,7 @@ import { useAuthContext } from "../hooks/useAuthContext";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import MemoryChangeContext from "../context/MemoryChangeContext";
+import { useForm, Controller } from 'react-hook-form';
 
 function MemoryForm({ memoryToEdit, isEditing, displayInformationBox, setIsEditing, setIsAdding }) {
     const [title, setTitle] = useState(isEditing ? memoryToEdit.title : "");
@@ -10,39 +11,43 @@ function MemoryForm({ memoryToEdit, isEditing, displayInformationBox, setIsEditi
     const [date, setDate] = useState(isEditing ? new Date(memoryToEdit.date) : new Date());
     const [isCoreMemory, setIsCoreMemory] = useState(isEditing ? memoryToEdit.isCoreMemory : false);
     const [selectedFile, setSelectedFile] = useState(null);
-    // const [validationErrors, setValidationErrors] = useState([]);
     const { user } = useAuthContext();
     const formRef = useRef(null);
+    const { register, control, formState: { errors }, handleSubmit } = useForm();
     const handleMemoryChange = useContext(MemoryChangeContext);
  
-    const handleSubmit =  (e) => {
-        e.preventDefault();
-        console.log("Title:", title, "Description:", description, "Date", date, "isCoreMemory", isCoreMemory);
-        apiCall();
-    }
+    const onSubmit = (data) => {
+        console.log("data", data)
+        // const formData = new FormData();
+        // formData.append("title", "something");
 
-    const resetFields = () => {
-        setTitle("");
-        setDescription("");
-        setDate(new Date());
-        setIsCoreMemory(false);
-        setSelectedFile(null);
-    }
 
-    const apiCall = () => {
-        const newMemory = new FormData();
-        newMemory.append("title", title);
-        newMemory.append("description", description);
-        newMemory.append("date", date);
-        newMemory.append("isCoreMemory", isCoreMemory);
-        newMemory.append("image", selectedFile);
+        const formData = new FormData();
+        formData.append("title", data["title"]);
+        formData.append("description", data["description"]);
+        formData.append("date", data["date"]);
+        formData.append("isCoreMemory", data["coreMemory"]);
+        formData.append("image", data["image"][0]);
+
+        // for (const key in data) {
+        //     if (key === "image") {
+        //         formData.append(key, data[key][0]);
+        //     } else {
+        //         formData.append(key, data[key])
+        //     }
+        // }
+
+        console.log("the image", data.image[0]);
+        console.log("formData", formData);
+        // formData.image = formData.image[0];
+        // console.log("formData after", formData);
 
         fetch(isEditing ? `http://localhost:5000/memories?editId=${memoryToEdit.id}` : "http://localhost:5000/memories", {
             method: isEditing ? "PUT" : "POST",
             headers: {
-                "Authorization": `Bearer ${user.token}`
+                "Authorization": `Bearer ${user.token}`,
             },
-            body: newMemory
+            body: formData
         })
         .then((response) => {
             return response.json();
@@ -51,16 +56,12 @@ function MemoryForm({ memoryToEdit, isEditing, displayInformationBox, setIsEditi
             if (data.type === "error") {
                 throw new Error(data.error);
             }
-            
-            // if (data.validationErrors) {
-            //     setValidationErrors(data.validationErrors)
-            // }
 
             if (data.type === "success") {
                 displayInformationBox(data.message, "success");
             }
 
-            console.log(data);
+            console.log("Clientside", data);
             handleMemoryChange();
         })
         .catch((error) => {
@@ -77,6 +78,14 @@ function MemoryForm({ memoryToEdit, isEditing, displayInformationBox, setIsEditi
         }
     }
 
+    const resetFields = () => {
+        setTitle("");
+        setDescription("");
+        setDate(new Date());
+        setIsCoreMemory(false);
+        setSelectedFile(null);
+    }
+
     const handleClickOutside = (event) => {
         if (formRef.current && !formRef.current.contains(event.target)) {
             setIsAdding(false);
@@ -84,13 +93,13 @@ function MemoryForm({ memoryToEdit, isEditing, displayInformationBox, setIsEditi
         }
     }
 
-    const handleFileSelect = async (e) => {
-        const file = e.target.files[0]
+    // const handleFileSelect = async (e) => {
+    //     const file = e.target.files[0]
 
-        if (file) {
-            setSelectedFile(file);
-        }
-    }
+    //     if (file) {
+    //         setSelectedFile(file);
+    //     }
+    // }
     
     useEffect(() => {
         document.addEventListener("mousedown", handleClickOutside);
@@ -103,46 +112,64 @@ function MemoryForm({ memoryToEdit, isEditing, displayInformationBox, setIsEditi
         <div ref={formRef} className="h-auto w-96 border-2 shadow-lg border-gray-100 bg-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-8 z-50">
             <h1 className="font-xl font-bold mb-3">{isEditing ? "Edit Memory" : "Add a New Memory"}</h1>
             <form
-                onSubmit={handleSubmit}
+                onSubmit={handleSubmit(onSubmit)}
                 className="flex flex-col gap-4"
                 >
 
                 {/* Title field */}
                 <div className="flex flex-col gap-1">
-                    <label className="text-sm" htmlFor="titleInput">Title</label>
+                    <label className="text-sm" htmlFor="title-input">Title</label>
                     <input
                         className="bg-gray-50 rounded-sm border border-gray-300 p-1"
-                        id="titleInput"
+                        id="title-input"
                         type="text"
-                        value={title}
-                        onChange={(e) => { setTitle(e.target.value) }}
-                    />
+                        {...register("title", {
+                            required: "Title is required",
+                            maxLength: { value: 20, message: "Title cannot be longer than 20 characters" }
+                        })} />
                 </div>
 
                 {/* Description field */}
                 <div className="flex flex-col gap-1">
-                    <label className="text-sm" htmlFor="descInput">Description</label>
+                    <label className="text-sm" htmlFor="desc-input">Description</label>
                     <textarea
                     className="bg-gray-50 rounded-sm border border-gray-300"
-                        id="descInput"
+                        id="desc-input"
                         type="text"
                         rows={6}
-                        value={description}
                         style={{ resize: 'none' }} // Set the resize property to none
-                        onChange={(e) => { setDescription(e.target.value) }}
-                    />
+                        {...register("description", {
+                            maxLength: { value: 100, message: "Description cannot be longer than 100 characters" }
+                        })} />
                 </div>
 
                 {/* Image field */}
                 <div className="flex flex-col gap-1">
                     <label className="text-sm" htmlFor="image-input">Image</label>
-                    <input id="image-input" className="text-sm bg-gray-50 border border-gray-300 rounded-sm" type="file" onChange={handleFileSelect} />
+                    <input 
+                        id="image-input" 
+                        className="text-sm bg-gray-50 border border-gray-300 rounded-sm" 
+                        type="file" 
+                        {...register("image", {
+                            required: "Image is required"
+                        })} />
                 </div>
 
                 {/* Date field */}
                 <div className="flex flex-col gap-1">
                     <h1 className="text-sm">Date</h1>
-                    <DatePicker className="rounded-sm text-sm bg-gray-50 w-full border border-gray-300 p-1" selected={date} onChange={(dateInput) => setDate(dateInput)} />
+                    <Controller 
+                        name="date"
+                        control={control}
+                        rules={{ required: true }}
+                        render={({ field }) => 
+                        <DatePicker className="rounded-sm text-sm bg-gray-50 w-full border border-gray-300 p-1" 
+                            selected={field.value} 
+                            onChange={(ev) => {
+                                field.onChange(ev);
+                            }} />
+                    }
+                    />
                 </div>
                 <div className="flex gap-2 items-center">
                     <label className="text-sm" htmlFor="coreMemoryInput">Core Memory</label>
@@ -150,10 +177,12 @@ function MemoryForm({ memoryToEdit, isEditing, displayInformationBox, setIsEditi
                         id="coreMemoryInput"
                         type="checkbox"
                         className="w-5 h-5"
-                        checked={isCoreMemory}
-                        onChange={() => setIsCoreMemory(!isCoreMemory)}
+                        {...register("coreMemory")}
                     />
                 </div>
+                {Object.keys(errors).map((fieldName) => (
+                    <p key={fieldName}>{errors[fieldName]}</p>
+                ))}
                 <button className="bg-blue-600 py-2 rounded-sm text-white text-sm" type="submit">{isEditing ? "Save" : "Submit"}</button>
             </form>
         </div>

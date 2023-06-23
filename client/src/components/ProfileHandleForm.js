@@ -56,7 +56,6 @@ function ProfileHandleForm({ displayInformationBox }) {
         })
         .then((data) => {
             if (data.validationErrors) {
-                console.log("Client has recieved.", data.validationErrors);
                 setValidationErrors(data.validationErrors);
             }
 

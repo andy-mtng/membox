@@ -135,8 +135,6 @@ const updateHandle = async (req, res) => {
           });    
       }
     })
-
-
 }
 
 const updateProfilePicture = (req, res) => {

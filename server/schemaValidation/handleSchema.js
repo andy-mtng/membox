@@ -8,7 +8,6 @@ const checkExistingHandle = async (newHandle, helpers) => {
         const exists = await User.findOne({ handle: newHandle });
 
         if (exists) {
-            console.log("Handle already exists");
             return helpers.message("Handle must be unique");
         }
         return newHandle;
