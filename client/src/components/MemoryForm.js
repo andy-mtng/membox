@@ -13,14 +13,19 @@ function MemoryForm({ memoryToEdit, isEditing, displayInformationBox, setIsEditi
     const [selectedFile, setSelectedFile] = useState(null);
     const { user } = useAuthContext();
     const formRef = useRef(null);
-    const { register, control, formState: { errors }, handleSubmit } = useForm();
+    const { register, control, formState: { errors }, handleSubmit } = useForm({
+        defaultValues: {
+          title: title,
+          description: description,
+          date: date,
+          coreMemory: isCoreMemory
+        }
+    });
+
     const handleMemoryChange = useContext(MemoryChangeContext);
  
     const onSubmit = (data) => {
         console.log("data", data)
-        // const formData = new FormData();
-        // formData.append("title", "something");
-
 
         const formData = new FormData();
         formData.append("title", data["title"]);
@@ -28,19 +33,6 @@ function MemoryForm({ memoryToEdit, isEditing, displayInformationBox, setIsEditi
         formData.append("date", data["date"]);
         formData.append("isCoreMemory", data["coreMemory"]);
         formData.append("image", data["image"][0]);
-
-        // for (const key in data) {
-        //     if (key === "image") {
-        //         formData.append(key, data[key][0]);
-        //     } else {
-        //         formData.append(key, data[key])
-        //     }
-        // }
-
-        console.log("the image", data.image[0]);
-        console.log("formData", formData);
-        // formData.image = formData.image[0];
-        // console.log("formData after", formData);
 
         fetch(isEditing ? `http://localhost:5000/memories?editId=${memoryToEdit.id}` : "http://localhost:5000/memories", {
             method: isEditing ? "PUT" : "POST",
@@ -93,6 +85,7 @@ function MemoryForm({ memoryToEdit, isEditing, displayInformationBox, setIsEditi
         }
     }
 
+    console.log(errors);
     // const handleFileSelect = async (e) => {
     //     const file = e.target.files[0]
 
@@ -120,27 +113,30 @@ function MemoryForm({ memoryToEdit, isEditing, displayInformationBox, setIsEditi
                 <div className="flex flex-col gap-1">
                     <label className="text-sm" htmlFor="title-input">Title</label>
                     <input
-                        className="bg-gray-50 rounded-sm border border-gray-300 p-1"
+                        className={`${errors.title ? "border-red-500" : ""} bg-gray-50 rounded-sm border border-gray-300 p-1`}
+                        defaultvalue={title}
                         id="title-input"
                         type="text"
                         {...register("title", {
                             required: "Title is required",
                             maxLength: { value: 20, message: "Title cannot be longer than 20 characters" }
                         })} />
+                    <p className="text-sm text-red-600">{errors.title?.message}</p>
                 </div>
 
                 {/* Description field */}
                 <div className="flex flex-col gap-1">
                     <label className="text-sm" htmlFor="desc-input">Description</label>
                     <textarea
-                    className="bg-gray-50 rounded-sm border border-gray-300"
+                    className={`${errors.description ? "border-red-500" : ""} bg-gray-50 rounded-sm border border-gray-300`}
                         id="desc-input"
                         type="text"
                         rows={6}
                         style={{ resize: 'none' }} // Set the resize property to none
                         {...register("description", {
-                            maxLength: { value: 100, message: "Description cannot be longer than 100 characters" }
+                            maxLength: { value: 80, message: "Description cannot be longer than 80 characters" }
                         })} />
+                    <p className="text-sm text-red-600">{errors.description?.message}</p>
                 </div>
 
                 {/* Image field */}
@@ -148,11 +144,21 @@ function MemoryForm({ memoryToEdit, isEditing, displayInformationBox, setIsEditi
                     <label className="text-sm" htmlFor="image-input">Image</label>
                     <input 
                         id="image-input" 
-                        className="text-sm bg-gray-50 border border-gray-300 rounded-sm" 
+                        className={`${errors.image ? "border-red-500" : ""} text-sm bg-gray-50 border border-gray-300 rounded-sm`}
                         type="file" 
                         {...register("image", {
-                            required: "Image is required"
+                            required: "Image is required",
+                            validate: {
+                                fileType: (value) => {
+                                  const allowedFileTypes = ['image/jpeg', 'image/png'];
+                                  if (value && allowedFileTypes.includes(value[0]?.type)) {
+                                    return true;
+                                  }
+                                  return 'Invalid file type';
+                                }
+                            }
                         })} />
+                    <p className="text-sm text-red-600">{errors.image?.message}</p>
                 </div>
 
                 {/* Date field */}
@@ -163,13 +169,14 @@ function MemoryForm({ memoryToEdit, isEditing, displayInformationBox, setIsEditi
                         control={control}
                         rules={{ required: true }}
                         render={({ field }) => 
-                        <DatePicker className="rounded-sm text-sm bg-gray-50 w-full border border-gray-300 p-1" 
+                        <DatePicker className={`${errors.date ? "border-red-500" : ""} rounded-sm text-sm bg-gray-50 w-full border border-gray-300 p-1`}
                             selected={field.value} 
                             onChange={(ev) => {
                                 field.onChange(ev);
                             }} />
                     }
                     />
+                    <p className="text-sm text-red-600">{errors.date?.message}</p>
                 </div>
                 <div className="flex gap-2 items-center">
                     <label className="text-sm" htmlFor="coreMemoryInput">Core Memory</label>
@@ -180,9 +187,9 @@ function MemoryForm({ memoryToEdit, isEditing, displayInformationBox, setIsEditi
                         {...register("coreMemory")}
                     />
                 </div>
-                {Object.keys(errors).map((fieldName) => (
+                {/* {Object.keys(errors).map((fieldName) => (
                     <p key={fieldName}>{errors[fieldName]}</p>
-                ))}
+                ))} */}
                 <button className="bg-blue-600 py-2 rounded-sm text-white text-sm" type="submit">{isEditing ? "Save" : "Submit"}</button>
             </form>
         </div>

@@ -77,7 +77,7 @@ function Memory({
                 </div>
                 <div className="absolute inset-0 bg-black opacity-60"></div>
             </div>
-            <p className="px-3 py-3 font-normal text-sm text-black mt-auto">{description}</p>
+            <p className="px-3 py-3 font-normal text-sm text-black mt-auto break-words">{description}</p>
         </div>
     )
 }

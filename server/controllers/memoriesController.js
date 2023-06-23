@@ -35,8 +35,6 @@ const createMemory = (req, res) => {
         contentType: req.file.mimetype
     }
 
-    console.log("Server-side Memory", newMemory);
-
     const newMemoryforDB = new memoryModel(newMemory);
     
     fs.unlink(req.file.path, (error) => {
