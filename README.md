@@ -1,5 +1,5 @@
 # Membox
-https://github.com/andy-mtng/membox/assets/104605803/68e92538-53f9-461f-bfeb-62d7a6898df9
+![membox_demo](https://github.com/andy-mtng/membox/assets/104605803/06b8323d-fc93-4c53-a31a-cab923285dc8)
 Membox organizes your photos, notes, and mementos, allowing you to revisit your most cherished memories whenever you desire.
 
  # Technologies Used 
