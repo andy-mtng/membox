@@ -39,6 +39,16 @@ const createMemory = (req, res) => {
     const validationResult = memorySchema.validate(newMemory);
     console.log("Server-side validation result", validationResult);
 
+    // Validation error has occured
+    if (validationResult.error) {
+        return res.status(400).json({
+            message: "",
+            error: "",
+            validationErrors: validationResult.error.details,
+            type: "validationError"
+          });      
+    }
+
     const newMemoryforDB = new memoryModel(newMemory);
     
     fs.unlink(req.file.path, (error) => {
@@ -94,9 +104,6 @@ const deleteMemory = (req, res) => {
 const editMemory = (req, res) => {
     const editId = req.query.editId;
     const editedMemory = req.body;
-    console.log("editID", editId);
-    console.log("editedMemory", editedMemory);
-    console.log("req.file", req.file);
 
     if (req.file) {
         const imageBuffer = fs.readFileSync(req.file.path);

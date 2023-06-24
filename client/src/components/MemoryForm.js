@@ -13,6 +13,7 @@ function MemoryForm({ memoryToEdit, isEditing, displayInformationBox, setIsEditi
     const [selectedFile, setSelectedFile] = useState(null);
     const { user } = useAuthContext();
     const formRef = useRef(null);
+    const { validationErrors, setValidationErrors } = useState([]);
     const { register, control, formState: { errors }, handleSubmit } = useForm({
         defaultValues: {
           title: title,
@@ -49,11 +50,14 @@ function MemoryForm({ memoryToEdit, isEditing, displayInformationBox, setIsEditi
                 throw new Error(data.error);
             }
 
+            if (data.validationErrors) {
+                setValidationErrors(data.validationErrors);
+            }
+
             if (data.type === "success") {
                 displayInformationBox(data.message, "success");
             }
 
-            console.log("Clientside", data);
             handleMemoryChange();
         })
         .catch((error) => {
@@ -84,15 +88,6 @@ function MemoryForm({ memoryToEdit, isEditing, displayInformationBox, setIsEditi
             setIsEditing(false);
         }
     }
-
-    console.log(errors);
-    // const handleFileSelect = async (e) => {
-    //     const file = e.target.files[0]
-
-    //     if (file) {
-    //         setSelectedFile(file);
-    //     }
-    // }
     
     useEffect(() => {
         document.addEventListener("mousedown", handleClickOutside);
@@ -187,9 +182,9 @@ function MemoryForm({ memoryToEdit, isEditing, displayInformationBox, setIsEditi
                         {...register("coreMemory")}
                     />
                 </div>
-                {/* {Object.keys(errors).map((fieldName) => (
-                    <p key={fieldName}>{errors[fieldName]}</p>
-                ))} */}
+                {validationErrors.map((validationError, index) => {
+                    return <p className="text-sm text-red-600" key={index}>{validationError.message}</p>
+                })}
                 <button className="bg-blue-600 py-2 rounded-sm text-white text-sm" type="submit">{isEditing ? "Save" : "Submit"}</button>
             </form>
         </div>
