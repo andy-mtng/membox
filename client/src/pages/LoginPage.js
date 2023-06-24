@@ -32,7 +32,7 @@ const LoginPage = () => {
             <div className="flex flex-col gap-2">
               <label className="text-xs">Email</label>
               <input
-                type="password"
+                type="email"
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
                 className="border border-gray-300 rounded-sm p-1"
