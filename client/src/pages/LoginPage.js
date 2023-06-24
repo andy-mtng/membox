@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 import PurpleCloudsCover from "../assets/purple-clouds.jpg"
 
 const LoginPage = () => {
-  const [email, setEmail] = useState('bob@gmail.com')
-  const [password, setPassword] = useState('Abc123456!')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const {login, error, isLoading} = useLogin()
 
   const handleSubmit = async (e) => {
@@ -32,7 +32,7 @@ const LoginPage = () => {
             <div className="flex flex-col gap-2">
               <label className="text-xs">Email</label>
               <input
-                type="email"
+                type="password"
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
                 className="border border-gray-300 rounded-sm p-1"
