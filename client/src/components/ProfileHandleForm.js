@@ -1,6 +1,7 @@
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useState, useEffect } from "react";
 import { useForm } from 'react-hook-form';
+import * as DOMPurify from "dompurify";
 
 function ProfileHandleForm({ displayInformationBox }) {
     const { user } = useAuthContext();
@@ -87,7 +88,7 @@ function ProfileHandleForm({ displayInformationBox }) {
                         id="handle" 
                         disabled={loading}
                         type="text" 
-                        defaultValue={handleData}
+                        defaultValue={DOMPurify.sanitize(handleData)}
                         {...register("handle", { 
                             required: "Handle is required.",  
                             minLength: { value: 5, message: "Handle must be longer than 5 characters." },

@@ -109,7 +109,7 @@ function MemoryForm({ memoryToEdit, isEditing, displayInformationBox, setIsEditi
                     <label className="text-sm" htmlFor="title-input">Title</label>
                     <input
                         className={`${errors.title ? "border-red-500" : ""} bg-gray-50 rounded-sm border border-gray-300 p-1`}
-                        defaultvalue={title}
+                        defaultValue={title}
                         id="title-input"
                         type="text"
                         {...register("title", {
@@ -182,7 +182,7 @@ function MemoryForm({ memoryToEdit, isEditing, displayInformationBox, setIsEditi
                         {...register("coreMemory")}
                     />
                 </div>
-                {validationErrors.map((validationError, index) => {
+                {validationErrors?.map((validationError, index) => {
                     return <p className="text-sm text-red-600" key={index}>{validationError.message}</p>
                 })}
                 <button className="bg-blue-600 py-2 rounded-sm text-white text-sm" type="submit">{isEditing ? "Save" : "Submit"}</button>
